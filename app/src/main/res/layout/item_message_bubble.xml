@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="4dp">
+
+    <!-- Sent Message (Right Side) -->
+    <LinearLayout
+        android:id="@+id/layout_sent_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:gravity="end"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="80dp"
+            app:cardBackgroundColor="@color/red_primary"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp">
+
+            <TextView
+                android:id="@+id/text_sent_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:text="Hey! Is the drill still available?" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/text_sent_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            tools:text="2:30 PM" />
+
+    </LinearLayout>
+
+    <!-- Received Message (Left Side) -->
+    <LinearLayout
+        android:id="@+id/layout_received_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:gravity="start"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginEnd="80dp"
+            app:cardBackgroundColor="@color/gray_light"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp">
+
+            <TextView
+                android:id="@+id/text_received_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                tools:text="Yes, it's available! When do you need it?" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/text_received_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            tools:text="2:35 PM" />
+
+    </LinearLayout>
+
+</LinearLayout> 

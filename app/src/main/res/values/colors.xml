@@ -7,4 +7,27 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- iOS App Theme Colors -->
+    <color name="red_primary">#FF0000</color>
+    <color name="red_dark">#CC0000</color>
+    <color name="orange_secondary">#FF4500</color>
+    <color name="orange_dark">#E63900</color>
+    
+    <!-- Additional colors -->
+    <color name="gray">#888888</color>
+    <color name="gray_dark">#555555</color>
+    <color name="gray_light">#EEEEEE</color>
+    <color name="orange_light">#FFE5D6</color>
+    
+    <!-- Missing colors referenced in layouts -->
+    <color name="red">#FF0000</color>
+    <color name="white_70">#B3FFFFFF</color>
+    <color name="black_60">#99000000</color>
+    <color name="white_80">#CCFFFFFF</color>
+    <color name="gray_40">#66888888</color>
+    
+    <!-- Gradient colors -->
+    <color name="gradient_start">#FF6B6B</color>
+    <color name="gradient_end">#4ECDC4</color>
 </resources>
