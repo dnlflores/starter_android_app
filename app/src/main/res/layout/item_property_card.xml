@@ -7,18 +7,17 @@
     android:orientation="vertical"
     android:layout_marginBottom="24dp">
 
-    <!-- Tool Image Container -->
+    <!-- Property Image Container -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_tool"
         android:layout_width="match_parent"
         android:layout_height="260dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp"
         app:cardBackgroundColor="#F0F0F0">
 
-        <!-- Tool Image -->
+        <!-- Property Image -->
         <ImageView
-            android:id="@+id/iv_tool_image"
+            android:id="@+id/property_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -27,7 +26,7 @@
 
         <!-- Heart Icon -->
         <ImageView
-            android:id="@+id/iv_favorite"
+            android:id="@+id/favorite_button"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_gravity="top|end"
@@ -40,14 +39,14 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Tool Info Section -->
+    <!-- Property Info Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="8dp">
 
-        <!-- Tool Name and Rating Row -->
+        <!-- Location and Rating Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +54,7 @@
             android:gravity="center_vertical">
 
             <TextView
-                android:id="@+id/tv_tool_name"
+                android:id="@+id/property_location"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -64,7 +63,7 @@
                 android:textStyle="bold"
                 android:maxLines="1"
                 android:ellipsize="end"
-                tools:text="Power Drill • Electric" />
+                tools:text="Mountain View, California" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -80,39 +79,39 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/tv_rating"
+                    android:id="@+id/property_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
                     android:textColor="#222222"
                     android:textSize="12sp"
-                    tools:text="4.8" />
+                    tools:text="4.98" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Owner Info -->
-        <TextView
-            android:id="@+id/tv_owner_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#717171"
-            android:textSize="15sp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            tools:text="Owned by Mike Wilson" />
-
         <!-- Distance -->
         <TextView
-            android:id="@+id/tv_distance"
+            android:id="@+id/property_distance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#717171"
             android:textSize="15sp"
             android:maxLines="1"
             android:ellipsize="end"
-            tools:text="850 meters away" />
+            tools:text="2,543 kilometers away" />
+
+        <!-- Dates -->
+        <TextView
+            android:id="@+id/property_dates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#717171"
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Nov 1 – 6" />
 
         <!-- Price -->
         <LinearLayout
@@ -122,19 +121,19 @@
             android:layout_marginTop="4dp">
 
             <TextView
-                android:id="@+id/tv_tool_price"
+                android:id="@+id/property_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#222222"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                tools:text="$25" />
+                tools:text="$89" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:text=" / day"
+                android:text=" night"
                 android:textColor="#222222"
                 android:textSize="15sp" />
 

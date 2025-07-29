@@ -15,12 +15,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.starter.R;
 import com.example.starter.models.Tool;
-import com.google.android.material.card.MaterialCardView;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class ToolsAdapter extends RecyclerView.Adapter<ToolsAdapter.ToolViewHolder> {
 
@@ -71,10 +71,11 @@ public class ToolsAdapter extends RecyclerView.Adapter<ToolsAdapter.ToolViewHold
     }
 
     static class ToolViewHolder extends RecyclerView.ViewHolder {
-        private final MaterialCardView cardView;
+        private final androidx.cardview.widget.CardView cardView;
         private final ImageView toolImage;
+        private final ImageView favoriteIcon;
         private final TextView toolName;
-        private final TextView toolDescription;
+        private final TextView toolRating;
         private final TextView toolPrice;
         private final TextView ownerName;
         private final TextView distance;
@@ -83,8 +84,9 @@ public class ToolsAdapter extends RecyclerView.Adapter<ToolsAdapter.ToolViewHold
             super(itemView);
             cardView = itemView.findViewById(R.id.card_tool);
             toolImage = itemView.findViewById(R.id.iv_tool_image);
+            favoriteIcon = itemView.findViewById(R.id.iv_favorite);
             toolName = itemView.findViewById(R.id.tv_tool_name);
-            toolDescription = itemView.findViewById(R.id.tv_tool_description);
+            toolRating = itemView.findViewById(R.id.tv_rating);
             toolPrice = itemView.findViewById(R.id.tv_tool_price);
             ownerName = itemView.findViewById(R.id.tv_owner_name);
             distance = itemView.findViewById(R.id.tv_distance);
@@ -92,21 +94,22 @@ public class ToolsAdapter extends RecyclerView.Adapter<ToolsAdapter.ToolViewHold
 
         public void bind(Tool tool, Location userLocation, OnToolClickListener listener) {
             toolName.setText(tool.getName());
-            
-            // Set description
-            if (tool.getDescription() != null && !tool.getDescription().isEmpty()) {
-                toolDescription.setText(tool.getDescription());
-                toolDescription.setVisibility(View.VISIBLE);
-            } else {
-                toolDescription.setVisibility(View.GONE);
-            }
 
-            // Format and set price
-            toolPrice.setText(formatPrice(tool.getPrice()));
+            // Generate and set a random rating (4.0-5.0)
+            Random random = new Random(tool.getId());
+            double rating = 4.0 + (random.nextDouble() * 1.0);
+            toolRating.setText(String.format(Locale.US, "%.2f", rating));
 
-            // Set owner name
-            if (tool.getOwnerUsername() != null) {
-                ownerName.setText("by " + tool.getOwnerUsername());
+            // Format and set price (clean format without "/day" in the main text)
+            String cleanPrice = formatPrice(tool.getPrice());
+            toolPrice.setText(cleanPrice);
+
+            // Set owner name in tool rental style
+            if (tool.getOwnerFullName() != null && !tool.getOwnerFullName().isEmpty()) {
+                ownerName.setText("Owned by " + tool.getOwnerFullName());
+                ownerName.setVisibility(View.VISIBLE);
+            } else if (tool.getOwnerUsername() != null) {
+                ownerName.setText("Owned by " + tool.getOwnerUsername());
                 ownerName.setVisibility(View.VISIBLE);
             } else {
                 ownerName.setVisibility(View.GONE);
@@ -118,27 +121,35 @@ public class ToolsAdapter extends RecyclerView.Adapter<ToolsAdapter.ToolViewHold
                 distance.setText(distanceText);
                 distance.setVisibility(View.VISIBLE);
             } else {
-                distance.setVisibility(View.GONE);
+                // Generate random distance for demo
+                int randomDistance = 500 + random.nextInt(3000);
+                distance.setText(randomDistance + " meters away");
+                distance.setVisibility(View.VISIBLE);
             }
 
             // Load image
             loadToolImage(tool);
 
-            // Set click listener
-            cardView.setOnClickListener(v -> {
+            // Set click listeners
+            View.OnClickListener clickListener = v -> {
                 if (listener != null) {
                     listener.onToolClick(tool);
                 }
-            });
+            };
+            
+            cardView.setOnClickListener(clickListener);
+            itemView.setOnClickListener(clickListener);
         }
 
         private String formatPrice(String priceString) {
             try {
-                double price = Double.parseDouble(priceString);
-                NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
-                return formatter.format(price) + "/day";
+                // Remove any existing currency symbols and extra text
+                String cleanPrice = priceString.replaceAll("[^0-9.]", "");
+                double price = Double.parseDouble(cleanPrice);
+                return "$" + String.format(Locale.US, "%.0f", price);
             } catch (NumberFormatException e) {
-                return "$" + priceString + "/day";
+                // If parsing fails, just add $ prefix
+                return "$" + priceString.replaceAll("[^0-9.]", "");
             }
         }
 
@@ -152,14 +163,12 @@ public class ToolsAdapter extends RecyclerView.Adapter<ToolsAdapter.ToolViewHold
             toolLocation.setLongitude(tool.getLongitude());
 
             float distanceMeters = userLocation.distanceTo(toolLocation);
-            double distanceMiles = distanceMeters * 0.000621371; // Convert to miles
 
-            if (distanceMiles < 0.1) {
-                return "< 0.1 mi";
-            } else if (distanceMiles < 1.0) {
-                return String.format(Locale.US, "%.1f mi", distanceMiles);
+            if (distanceMeters < 1000) {
+                return String.format(Locale.US, "%.0f meters away", distanceMeters);
             } else {
-                return String.format(Locale.US, "%.0f mi", distanceMiles);
+                double distanceKm = distanceMeters / 1000.0;
+                return String.format(Locale.US, "%.1f km away", distanceKm);
             }
         }
 
@@ -167,7 +176,7 @@ public class ToolsAdapter extends RecyclerView.Adapter<ToolsAdapter.ToolViewHold
             RequestOptions options = new RequestOptions()
                     .placeholder(R.drawable.placeholder_tool)
                     .error(R.drawable.error_tool)
-                    .transform(new RoundedCorners(16));
+                    .centerCrop();
 
             if (tool.getImageUrl() != null && !tool.getImageUrl().isEmpty()) {
                 Glide.with(itemView.getContext())

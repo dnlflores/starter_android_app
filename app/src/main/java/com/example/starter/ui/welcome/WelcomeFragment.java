@@ -25,7 +25,6 @@ import com.example.starter.models.Tool;
 import com.example.starter.network.NetworkManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -43,11 +42,10 @@ public class WelcomeFragment extends Fragment implements ToolsAdapter.OnToolClic
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private TextView emptyTextView;
-    private MaterialButton filterButton;
+    private androidx.cardview.widget.CardView filterButton;
     private ChipGroup viewModeChips;
     private Chip listChip;
     private Chip mapChip;
-    private TextView headerTitle;
     private TextView headerSubtitle;
     
     // Data and Logic
@@ -113,11 +111,9 @@ public class WelcomeFragment extends Fragment implements ToolsAdapter.OnToolClic
         viewModeChips = view.findViewById(R.id.chip_group_view_mode);
         listChip = view.findViewById(R.id.chip_list);
         mapChip = view.findViewById(R.id.chip_map);
-        headerTitle = view.findViewById(R.id.header_title);
         headerSubtitle = view.findViewById(R.id.header_subtitle);
         
-        // Set initial header text
-        headerTitle.setText("Explore Available Tools");
+        // Update header subtitle for filter status
         updateHeaderSubtitle();
     }
 
@@ -143,6 +139,22 @@ public class WelcomeFragment extends Fragment implements ToolsAdapter.OnToolClic
         filterButton.setOnClickListener(v -> showFilterDialog());
         
         viewModeChips.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            // Handle tool category filtering
+            if (checkedIds.contains(R.id.chip_all)) {
+                // Show all tools - no additional filtering needed
+                applyFiltersAndSort();
+            } else if (checkedIds.contains(R.id.chip_power_tools)) {
+                // Filter for power tools
+                filterToolsByCategory("power");
+            } else if (checkedIds.contains(R.id.chip_hand_tools)) {
+                // Filter for hand tools
+                filterToolsByCategory("hand");
+            } else if (checkedIds.contains(R.id.chip_outdoor)) {
+                // Filter for outdoor tools
+                filterToolsByCategory("outdoor");
+            }
+            
+            // Handle view mode changes
             if (checkedIds.contains(R.id.chip_list)) {
                 selectedViewMode = 0;
                 showListView();
@@ -152,8 +164,48 @@ public class WelcomeFragment extends Fragment implements ToolsAdapter.OnToolClic
             }
         });
         
-        // Set default selection
-        listChip.setChecked(true);
+        // Set default selection to "All Tools" category
+        if (viewModeChips.findViewById(R.id.chip_all) != null) {
+            viewModeChips.check(R.id.chip_all);
+        }
+    }
+
+    private void filterToolsByCategory(String category) {
+        List<Tool> categoryTools = new ArrayList<>();
+        for (Tool tool : allTools) {
+            String toolName = tool.getName().toLowerCase();
+            String toolDescription = tool.getDescription().toLowerCase();
+            
+            switch (category) {
+                case "power":
+                    if (toolName.contains("drill") || toolName.contains("saw") || toolName.contains("grinder") ||
+                        toolName.contains("power") || toolDescription.contains("electric") || 
+                        toolDescription.contains("power")) {
+                        categoryTools.add(tool);
+                    }
+                    break;
+                case "hand":
+                    if (toolName.contains("hammer") || toolName.contains("wrench") || toolName.contains("screwdriver") ||
+                        toolName.contains("hand") || toolDescription.contains("manual") || 
+                        toolDescription.contains("hand")) {
+                        categoryTools.add(tool);
+                    }
+                    break;
+                case "outdoor":
+                    if (toolName.contains("mower") || toolName.contains("trimmer") || toolName.contains("chainsaw") ||
+                        toolName.contains("garden") || toolDescription.contains("outdoor") || 
+                        toolDescription.contains("yard")) {
+                        categoryTools.add(tool);
+                    }
+                    break;
+                default:
+                    categoryTools.addAll(allTools);
+                    break;
+            }
+        }
+        
+        filteredTools = categoryTools;
+        applyFiltersAndSort();
     }
 
     private void requestLocationPermission() {
@@ -330,14 +382,19 @@ public class WelcomeFragment extends Fragment implements ToolsAdapter.OnToolClic
     }
 
     private void showListView() {
+        // Show the RecyclerView and hide any map view
         recyclerView.setVisibility(View.VISIBLE);
-        // Hide map view when implemented
+        // TODO: Hide map view when implemented
+        Toast.makeText(getContext(), "Showing tools in list view", Toast.LENGTH_SHORT).show();
     }
 
     private void showMapView() {
-        recyclerView.setVisibility(View.GONE);
-        // Show map view when implemented
-        Toast.makeText(getContext(), "Map view coming soon!", Toast.LENGTH_SHORT).show();
+        // TODO: Implement map view functionality
+        // For now, show a message that map view will be implemented
+        Toast.makeText(getContext(), "Map view - Coming Soon! Will show all tools on map", Toast.LENGTH_LONG).show();
+        
+        // Keep list view visible for now
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     private void setLoadingState(boolean loading) {
@@ -390,7 +447,6 @@ public class WelcomeFragment extends Fragment implements ToolsAdapter.OnToolClic
         viewModeChips = null;
         listChip = null;
         mapChip = null;
-        headerTitle = null;
         headerSubtitle = null;
         swipeRefreshLayout = null;
     }
