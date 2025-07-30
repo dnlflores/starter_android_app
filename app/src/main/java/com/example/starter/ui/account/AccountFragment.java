@@ -4,8 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -27,6 +26,7 @@ public class AccountFragment extends Fragment {
         View root = binding.getRoot();
 
         setupObservers();
+        setupClickListeners();
         
         return root;
     }
@@ -48,12 +48,35 @@ public class AccountFragment extends Fragment {
         });
     }
 
+    private void setupClickListeners() {
+        // Profile settings
+        binding.editProfileRow.setOnClickListener(v -> 
+            Toast.makeText(getContext(), "Edit Profile clicked", Toast.LENGTH_SHORT).show());
+        
+        binding.accountInfoRow.setOnClickListener(v -> 
+            Toast.makeText(getContext(), "Account Information clicked", Toast.LENGTH_SHORT).show());
+
+        // Preferences
+        binding.notificationsRow.setOnClickListener(v -> 
+            Toast.makeText(getContext(), "Notifications clicked", Toast.LENGTH_SHORT).show());
+        
+        binding.privacyRow.setOnClickListener(v -> 
+            Toast.makeText(getContext(), "Privacy & Security clicked", Toast.LENGTH_SHORT).show());
+
+        // Support
+        binding.helpCenterRow.setOnClickListener(v -> 
+            Toast.makeText(getContext(), "Help Center clicked", Toast.LENGTH_SHORT).show());
+        
+        binding.logoutRow.setOnClickListener(v -> 
+            Toast.makeText(getContext(), "Log Out clicked", Toast.LENGTH_SHORT).show());
+    }
+
     private void displayUser(User user) {
         if (user == null) return;
         
-        binding.textAccount.setText("Welcome, " + user.getUsername() + "!");
-        binding.userIdText.setText("User ID: " + user.getId());
-        binding.usernameText.setText("Username: " + user.getUsername());
+        binding.textAccount.setText("Welcome back!");
+        binding.usernameText.setText(user.getUsername());
+        binding.userIdText.setText("ID: " + user.getId());
     }
 
     @Override

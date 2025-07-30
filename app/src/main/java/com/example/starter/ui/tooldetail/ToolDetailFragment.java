@@ -20,10 +20,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.starter.R;
 import com.example.starter.model.Tool;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Locale;
 
-public class ToolDetailFragment extends Fragment {
+public class ToolDetailFragment extends Fragment implements OnMapReadyCallback {
     
     private static final String ARG_TOOL_ID = "tool_id";
     
@@ -37,6 +43,10 @@ public class ToolDetailFragment extends Fragment {
     private LinearLayout ownerSection;
     private ProgressBar progressBar;
     private TextView errorText;
+    private View mapOverlay;
+    
+    private GoogleMap map;
+    private Tool currentTool;
     
     private int toolId;
 
@@ -69,6 +79,7 @@ public class ToolDetailFragment extends Fragment {
         initViews(root);
         setupViewModel();
         observeViewModel();
+        setupMap();
         
         // Load tool details
         if (toolId != -1) {
@@ -92,10 +103,41 @@ public class ToolDetailFragment extends Fragment {
         ownerSection = root.findViewById(R.id.owner_section);
         progressBar = root.findViewById(R.id.progress_bar);
         errorText = root.findViewById(R.id.error_text);
+        mapOverlay = root.findViewById(R.id.map_overlay);
+        
+        // Set up contact button click listener
+        root.findViewById(R.id.button_contact).setOnClickListener(v -> {
+            if (currentTool != null) {
+                // Navigate to chat or show contact options
+                Toast.makeText(requireContext(), 
+                    "Contacting " + currentTool.getOwnerUsername(), 
+                    Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setupViewModel() {
         viewModel = new ViewModelProvider(this).get(ToolDetailViewModel.class);
+    }
+
+    private void setupMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map_preview);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
+        
+        // Set up map overlay click listener
+        if (mapOverlay != null) {
+            mapOverlay.setOnClickListener(v -> {
+                if (currentTool != null) {
+                    // Navigate to full map view or show location details
+                    Toast.makeText(requireContext(), 
+                        "Location: " + currentTool.getLatitude() + ", " + currentTool.getLongitude(), 
+                        Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void observeViewModel() {
@@ -114,8 +156,26 @@ public class ToolDetailFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        map = googleMap;
+        
+        // Configure map settings
+        map.getUiSettings().setZoomControlsEnabled(false);
+        map.getUiSettings().setMapToolbarEnabled(false);
+        map.getUiSettings().setCompassEnabled(false);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+        
+        // If we already have tool data, show the location
+        if (currentTool != null) {
+            showToolLocation(currentTool);
+        }
+    }
+
     private void displayTool(Tool tool) {
         if (tool == null) return;
+        
+        currentTool = tool;
         
         toolName.setText(tool.getName());
         
@@ -142,6 +202,34 @@ public class ToolDetailFragment extends Fragment {
         
         // Load tool image
         loadToolImage(tool.getImageUrl());
+        
+        // Show tool location on map if map is ready
+        if (map != null) {
+            showToolLocation(tool);
+        }
+    }
+    
+    private void showToolLocation(Tool tool) {
+        if (map == null || tool == null) return;
+        
+        try {
+            LatLng toolLocation = new LatLng(tool.getLatitude(), tool.getLongitude());
+            
+            // Clear existing markers
+            map.clear();
+            
+            // Add marker for tool location
+            map.addMarker(new MarkerOptions()
+                    .position(toolLocation)
+                    .title(tool.getName())
+                    .snippet("Tool location"));
+            
+            // Move camera to tool location with zoom
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(toolLocation, 15f));
+            
+        } catch (Exception e) {
+            Log.e("ToolDetailFragment", "Error showing tool location", e);
+        }
     }
     
     private void loadToolImage(String imageUrl) {

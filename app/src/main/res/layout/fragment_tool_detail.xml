@@ -7,27 +7,13 @@
     android:background="@color/tool_detail_orange"
     tools:context=".ui.tooldetail.ToolDetailFragment">
 
-    <!-- Tool Image (Black and White Portrait) -->
-    <ImageView
-        android:id="@+id/tool_image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/airbnb_light_gray"
-        android:contentDescription="Tool Image"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_percent="0.4"
-        tools:src="@drawable/ic_launcher_foreground" />
-
     <!-- Scrollable Content Area -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         android:background="@color/tool_detail_orange"
-        app:layout_constraintTop_toBottomOf="@+id/tool_image"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/bottom_action_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -37,108 +23,169 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp"
             android:background="@color/tool_detail_orange">
 
-            <!-- Tool Name -->
-            <TextView
-                android:id="@+id/tool_name"
+            <!-- Tool Image (Now part of scrollable content) -->
+            <ImageView
+                android:id="@+id/tool_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"
-                android:layout_marginBottom="8dp"
-                tools:text="Professional Claw Hammer" />
+                android:layout_height="300dp"
+                android:background="@color/airbnb_light_gray"
+                android:contentDescription="Tool Image"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/ic_launcher_foreground" />
 
-            <!-- Price -->
-            <TextView
-                android:id="@+id/tool_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"
-                android:layout_marginBottom="16dp"
-                tools:text="$25.00 per day" />
-
-            <!-- Separator Line -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/white"
-                android:layout_marginBottom="16dp" />
-
-            <!-- Owner Section -->
+            <!-- Content Padding -->
             <LinearLayout
-                android:id="@+id/owner_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground">
+                android:orientation="vertical"
+                android:padding="24dp">
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_account_black_24dp"
-                    app:tint="@color/tool_detail_gray"
-                    android:layout_marginEnd="8dp" />
-
+                <!-- Tool Name -->
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Owned by "
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:fontFamily="sans-serif" />
-
-                <TextView
-                    android:id="@+id/tool_owner"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tool_name"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textSize="28sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"
-                    tools:text="Daniel Flores" />
+                    android:layout_marginBottom="8dp"
+                    tools:text="Professional Claw Hammer" />
+
+                <!-- Price -->
+                <TextView
+                    android:id="@+id/tool_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="16dp"
+                    tools:text="$25.00 per day" />
+
+                <!-- Separator Line -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/white"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Owner Section -->
+                <LinearLayout
+                    android:id="@+id/owner_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_account_black_24dp"
+                        app:tint="@color/tool_detail_gray"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Owned by "
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif" />
+
+                    <TextView
+                        android:id="@+id/tool_owner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        tools:text="Daniel Flores" />
+
+                </LinearLayout>
+
+                <!-- Separator Line -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/white"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Location Section -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Location"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Mini Map Preview -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@color/airbnb_light_gray"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground">
+
+                    <fragment
+                        android:id="@+id/map_preview"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <!-- Map Overlay for click handling -->
+                    <View
+                        android:id="@+id/map_overlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent" />
+
+                </FrameLayout>
+
+                <!-- Separator Line -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/white"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- About this tool -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="About this tool"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Tool Description -->
+                <TextView
+                    android:id="@+id/tool_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif"
+                    android:lineSpacingExtra="4dp"
+                    android:layout_marginBottom="24dp"
+                    tools:text="Professional-grade 16oz claw hammer with ergonomic fiberglass handle and balanced weight distribution. Features a forged steel head with precision-machined striking surface for consistent nail driving. The curved claw provides excellent leverage for nail removal Anti-." />
 
             </LinearLayout>
-
-            <!-- Separator Line -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/white"
-                android:layout_marginBottom="16dp" />
-
-            <!-- About this tool -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="About this tool"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Tool Description -->
-            <TextView
-                android:id="@+id/tool_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:fontFamily="sans-serif"
-                android:lineSpacingExtra="4dp"
-                android:layout_marginBottom="24dp"
-                tools:text="Professional-grade 16oz claw hammer with ergonomic fiberglass handle and balanced weight distribution. Features a forged steel head with precision-machined striking surface for consistent nail driving. The curved claw provides excellent leverage for nail removal Anti-." />
 
         </LinearLayout>
 
