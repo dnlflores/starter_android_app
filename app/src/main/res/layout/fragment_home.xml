@@ -31,7 +31,7 @@
                 android:paddingTop="60dp"
                 android:paddingStart="24dp"
                 android:paddingEnd="24dp"
-                android:paddingBottom="40dp">
+                android:paddingBottom="20dp">
 
                 <!-- Header Row with Title and Filters Button -->
                 <LinearLayout
