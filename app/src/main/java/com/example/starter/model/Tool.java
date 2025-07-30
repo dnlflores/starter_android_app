@@ -16,12 +16,15 @@ public class Tool {
     
     @SerializedName("image_url")
     private String imageUrl;
+    
+    private double latitude;
+    private double longitude;
 
     // Default constructor for Gson
     public Tool() {}
 
     // Constructor
-    public Tool(int id, String name, double price, String description, int ownerId, String ownerUsername, String imageUrl) {
+    public Tool(int id, String name, double price, String description, int ownerId, String ownerUsername, String imageUrl, double latitude, double longitude) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -29,6 +32,8 @@ public class Tool {
         this.ownerId = ownerId;
         this.ownerUsername = ownerUsername;
         this.imageUrl = imageUrl;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     // Getters
@@ -59,6 +64,14 @@ public class Tool {
     public String getImageUrl() {
         return imageUrl;
     }
+    
+    public double getLatitude() {
+        return latitude;
+    }
+    
+    public double getLongitude() {
+        return longitude;
+    }
 
     // Setters
     public void setId(int id) {
@@ -88,6 +101,14 @@ public class Tool {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+    
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+    
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 
     @Override
     public String toString() {
@@ -99,6 +120,8 @@ public class Tool {
                 ", ownerId=" + ownerId +
                 ", ownerUsername='" + ownerUsername + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 '}';
     }
 }
