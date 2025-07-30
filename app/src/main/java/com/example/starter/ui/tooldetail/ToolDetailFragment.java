@@ -16,8 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-// import com.bumptech.glide.Glide;
-// import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.starter.R;
 import com.example.starter.model.Tool;
 
@@ -138,12 +138,6 @@ public class ToolDetailFragment extends Fragment {
     }
     
     private void loadToolImage(String imageUrl) {
-        // TODO: Implement proper image loading when Glide dependency is resolved
-        // For now, just set a placeholder image
-        toolImage.setImageResource(R.drawable.ic_launcher_foreground);
-        
-        // When Glide is working, uncomment this code:
-        /*
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Glide.with(this)
                     .load(imageUrl)
@@ -155,6 +149,5 @@ public class ToolDetailFragment extends Fragment {
         } else {
             toolImage.setImageResource(R.drawable.ic_launcher_foreground);
         }
-        */
     }
 }

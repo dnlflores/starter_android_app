@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-// import com.bumptech.glide.Glide;
-// import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.starter.R;
 import com.example.starter.model.Tool;
 
@@ -71,12 +71,6 @@ public class ToolsAdapter extends RecyclerView.Adapter<ToolsAdapter.ToolViewHold
         }
 
         public void bind(Tool tool, OnToolClickListener clickListener) {
-            // TODO: Implement proper image loading when Glide dependency is resolved
-            // For now, just set a placeholder image
-            imageView.setImageResource(R.drawable.ic_launcher_foreground);
-            
-            // When Glide is working, uncomment this code:
-            /*
             // Load image with Glide
             if (tool.getImageUrl() != null && !tool.getImageUrl().isEmpty()) {
                 Glide.with(itemView.getContext())
@@ -90,7 +84,6 @@ public class ToolsAdapter extends RecyclerView.Adapter<ToolsAdapter.ToolViewHold
                 // Set default placeholder if no image URL
                 imageView.setImageResource(R.drawable.ic_launcher_foreground);
             }
-            */
 
             nameTextView.setText(tool.getName());
             priceTextView.setText(String.format(Locale.getDefault(), "$%.2f", tool.getPrice()));
