@@ -25,8 +25,7 @@ public class HomeViewModel extends ViewModel {
         mTools = new MutableLiveData<>();
         mIsLoading = new MutableLiveData<>();
         mError = new MutableLiveData<>();
-        
-        mText.setValue("Available Tools");
+
         mIsLoading.setValue(false);
         
         loadTools();
