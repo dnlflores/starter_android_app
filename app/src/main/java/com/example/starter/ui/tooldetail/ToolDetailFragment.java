@@ -31,6 +31,7 @@ public class ToolDetailFragment extends Fragment {
     private ImageView toolImage;
     private TextView toolName;
     private TextView toolPrice;
+    private TextView bottomPrice;
     private TextView toolDescription;
     private TextView toolOwner;
     private LinearLayout ownerSection;
@@ -85,6 +86,7 @@ public class ToolDetailFragment extends Fragment {
         toolImage = root.findViewById(R.id.tool_image);
         toolName = root.findViewById(R.id.tool_name);
         toolPrice = root.findViewById(R.id.tool_price);
+        bottomPrice = root.findViewById(R.id.bottom_price);
         toolDescription = root.findViewById(R.id.tool_description);
         toolOwner = root.findViewById(R.id.tool_owner);
         ownerSection = root.findViewById(R.id.owner_section);
@@ -116,9 +118,14 @@ public class ToolDetailFragment extends Fragment {
         if (tool == null) return;
         
         toolName.setText(tool.getName());
-        toolPrice.setText(String.format(Locale.getDefault(), "$%.2f", tool.getPrice()));
+        
+        // Format price with "per day" suffix
+        String priceText = String.format(Locale.getDefault(), "$%.2f per day", tool.getPrice());
+        toolPrice.setText(priceText);
+        bottomPrice.setText(priceText);
+        
         toolDescription.setText(tool.getDescription());
-        toolOwner.setText(getString(R.string.owner_label, tool.getOwnerUsername()));
+        toolOwner.setText(tool.getOwnerUsername());
         
         // Set up owner section click listener
         if (ownerSection != null) {
