@@ -1,6 +1,7 @@
 package com.example.starter.network;
 
 import com.example.starter.model.Tool;
+import com.example.starter.model.User;
 
 import java.util.List;
 
@@ -14,4 +15,10 @@ public interface ApiService {
     
     @GET("tools/{id}")
     Call<Tool> getTool(@Path("id") int toolId);
+    
+    @GET("users")
+    Call<List<User>> getUsers();
+    
+    @GET("users/{id}")
+    Call<User> getUser(@Path("id") int userId);
 }

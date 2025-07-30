@@ -1,4 +1,4 @@
-package com.example.starter.ui.account;
+package com.example.starter.ui.profile;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,56 +11,47 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AccountViewModel extends ViewModel {
+public class UserProfileViewModel extends ViewModel {
+    private final MutableLiveData<User> user = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<String> error = new MutableLiveData<>();
 
-    private final MutableLiveData<User> mUser;
-    private final MutableLiveData<Boolean> mIsLoading;
-    private final MutableLiveData<String> mError;
-
-    public AccountViewModel() {
-        mUser = new MutableLiveData<>();
-        mIsLoading = new MutableLiveData<>();
-        mError = new MutableLiveData<>();
-        
-        mIsLoading.setValue(false);
-        
-        // For now, load the first user as a demo
-        // In a real app, this would be the logged-in user's ID
-        loadUser(1);
+    public UserProfileViewModel() {
+        isLoading.setValue(false);
     }
 
     public LiveData<User> getUser() {
-        return mUser;
+        return user;
     }
 
     public LiveData<Boolean> getIsLoading() {
-        return mIsLoading;
+        return isLoading;
     }
 
     public LiveData<String> getError() {
-        return mError;
+        return error;
     }
 
     public void loadUser(int userId) {
-        mIsLoading.setValue(true);
-        mError.setValue(null);
+        isLoading.setValue(true);
+        error.setValue(null);
 
         Call<User> call = ApiClient.getApiService().getUser(userId);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                mIsLoading.setValue(false);
+                isLoading.setValue(false);
                 if (response.isSuccessful() && response.body() != null) {
-                    mUser.setValue(response.body());
+                    user.setValue(response.body());
                 } else {
-                    mError.setValue("Failed to load user data");
+                    error.setValue("Failed to load user profile");
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                mIsLoading.setValue(false);
-                mError.setValue("Network error: " + t.getMessage());
+                isLoading.setValue(false);
+                error.setValue("Network error: " + t.getMessage());
             }
         });
     }

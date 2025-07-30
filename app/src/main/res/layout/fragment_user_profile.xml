@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     android:background="@color/airbnb_white"
     android:padding="24dp"
-    tools:context=".ui.account.AccountFragment">
+    tools:context=".ui.profile.UserProfileFragment">
 
     <!-- Header -->
     <TextView
-        android:id="@+id/text_account"
+        android:id="@+id/profile_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Account"
+        android:text="User Profile"
         android:textColor="@color/airbnb_black"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -26,14 +26,14 @@
 
     <!-- User Information Card -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/user_card"
+        android:id="@+id/user_info_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="4dp"
         app:cardBackgroundColor="@color/airbnb_white"
-        app:layout_constraintTop_toBottomOf="@id/text_account"
+        app:layout_constraintTop_toBottomOf="@id/profile_header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -43,22 +43,39 @@
             android:orientation="vertical"
             android:padding="24dp">
 
+            <!-- User Avatar Placeholder -->
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_account_black_24dp"
+                android:background="@color/airbnb_light_gray"
+                android:padding="16dp" />
+
+            <!-- Username -->
             <TextView
-                android:id="@+id/user_id_text"
+                android:id="@+id/user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Loading..."
+                android:textColor="@color/airbnb_black"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <!-- User ID -->
+            <TextView
+                android:id="@+id/user_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="User ID: Loading..."
-                android:textColor="@color/airbnb_black"
+                android:textColor="@color/airbnb_medium_gray"
                 android:textSize="16sp"
-                android:layout_marginBottom="12dp" />
-
-            <TextView
-                android:id="@+id/username_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Username: Loading..."
-                android:textColor="@color/airbnb_black"
-                android:textSize="16sp" />
+                android:fontFamily="sans-serif"
+                android:gravity="center" />
 
         </LinearLayout>
 
@@ -80,7 +97,7 @@
         android:id="@+id/error_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Failed to load user data"
+        android:text="Failed to load user profile"
         android:textColor="@color/airbnb_primary"
         android:visibility="gone"
         android:padding="16dp"

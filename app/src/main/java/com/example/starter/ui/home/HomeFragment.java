@@ -155,10 +155,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
     
     private void onToolClick(Tool tool) {
-        // Navigate to tool detail fragment
-        Bundle bundle = new Bundle();
-        bundle.putInt("tool_id", tool.getId());
-        Navigation.findNavController(requireView()).navigate(R.id.action_home_to_tool_detail, bundle);
+        try {
+            Log.d("HomeFragment", "Navigating to tool detail for tool ID: " + tool.getId());
+            // Navigate to tool detail fragment
+            Bundle bundle = new Bundle();
+            bundle.putInt("tool_id", tool.getId());
+            Navigation.findNavController(requireView()).navigate(R.id.action_home_to_tool_detail, bundle);
+        } catch (Exception e) {
+            Log.e("HomeFragment", "Error navigating to tool detail", e);
+            Toast.makeText(requireContext(), "Error opening tool details", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -236,7 +242,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(location)
                     .title(tool.getName())
-                    .snippet("$" + tool.getPrice() + " - " + tool.getOwnerUsername());
+                    .snippet("$" + tool.getPrice() + " • Owner: " + tool.getOwnerUsername());
             
             googleMap.addMarker(markerOptions);
         }

@@ -9,4 +9,7 @@
     <string name="filters">Filters</string>
     <string name="list">List</string>
     <string name="map">Map</string>
+    <string name="invalid_tool_id">Invalid tool ID</string>
+    <string name="owner_label">Owner: %s</string>
+    <string name="viewing_profile">Viewing profile of %1$s (ID: %2$d)</string>
 </resources>

@@ -40,22 +40,29 @@ public class ToolDetailViewModel extends ViewModel {
         isLoading.setValue(true);
         error.setValue(null);
 
+        android.util.Log.d("ToolDetailViewModel", "Loading tool with ID: " + toolId);
         Call<Tool> call = apiService.getTool(toolId);
         call.enqueue(new Callback<Tool>() {
             @Override
             public void onResponse(Call<Tool> call, Response<Tool> response) {
                 isLoading.setValue(false);
+                android.util.Log.d("ToolDetailViewModel", "Response received for tool ID " + toolId + ": " + response.code());
                 if (response.isSuccessful() && response.body() != null) {
                     tool.setValue(response.body());
+                    android.util.Log.d("ToolDetailViewModel", "Tool loaded successfully: " + response.body().getName());
                 } else {
-                    error.setValue("Failed to load tool details");
+                    String errorMsg = "Failed to load tool details (HTTP " + response.code() + ")";
+                    android.util.Log.e("ToolDetailViewModel", errorMsg);
+                    error.setValue(errorMsg);
                 }
             }
 
             @Override
             public void onFailure(Call<Tool> call, Throwable t) {
                 isLoading.setValue(false);
-                error.setValue("Network error: " + t.getMessage());
+                String errorMsg = "Network error: " + t.getMessage();
+                android.util.Log.e("ToolDetailViewModel", errorMsg, t);
+                error.setValue(errorMsg);
             }
         });
     }

@@ -98,13 +98,17 @@
                 android:layout_marginBottom="12dp" />
 
             <LinearLayout
+                android:id="@+id/owner_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:background="@color/airbnb_off_white"
                 android:padding="16dp"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="24dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground">
 
                 <ImageView
                     android:layout_width="40dp"
