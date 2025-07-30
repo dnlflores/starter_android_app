@@ -7,12 +7,17 @@ import androidx.lifecycle.ViewModel;
 import com.example.starter.model.Tool;
 import com.example.starter.model.User;
 import com.example.starter.network.ApiClient;
+import com.example.starter.network.ApiService;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeViewModel extends ViewModel {
 
@@ -71,7 +76,24 @@ public class HomeViewModel extends ViewModel {
         mIsLoading.setValue(true);
         mError.setValue(null);
 
-        Call<List<Tool>> call = ApiClient.getApiService().getTools();
+        // Create OkHttpClient with extended timeout for slow connections
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(120, TimeUnit.SECONDS) // 2 minutes connect timeout
+                .readTimeout(120, TimeUnit.SECONDS)    // 2 minutes read timeout
+                .writeTimeout(120, TimeUnit.SECONDS)   // 2 minutes write timeout
+                .build();
+
+        // Create a temporary Retrofit instance with extended timeout
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiClient.BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        // Use the temporary service for this call
+        ApiService tempService = retrofit.create(ApiService.class);
+        Call<List<Tool>> call = tempService.getTools();
+        
         call.enqueue(new Callback<List<Tool>>() {
             @Override
             public void onResponse(Call<List<Tool>> call, Response<List<Tool>> response) {
@@ -92,7 +114,24 @@ public class HomeViewModel extends ViewModel {
     }
 
     public void loadUsers() {
-        Call<List<User>> call = ApiClient.getApiService().getUsers();
+        // Create OkHttpClient with extended timeout for slow connections
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(120, TimeUnit.SECONDS) // 2 minutes connect timeout
+                .readTimeout(120, TimeUnit.SECONDS)    // 2 minutes read timeout
+                .writeTimeout(120, TimeUnit.SECONDS)   // 2 minutes write timeout
+                .build();
+
+        // Create a temporary Retrofit instance with extended timeout
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiClient.BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        // Use the temporary service for this call
+        ApiService tempService = retrofit.create(ApiService.class);
+        Call<List<User>> call = tempService.getUsers();
+        
         call.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {

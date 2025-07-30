@@ -2,12 +2,10 @@ package com.example.starter.ui.home;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.starter.R;
 import com.example.starter.databinding.FragmentHomeBinding;
@@ -28,9 +25,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
@@ -56,6 +51,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // Set up button click listeners
         setupButtonListeners();
 
+        // Set up SwipeRefreshLayout
+        setupSwipeRefreshLayout(homeViewModel);
+
         // Initialize location services
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
@@ -78,6 +76,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         homeViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+            // Stop the refresh animation when loading is complete
+            if (!isLoading) {
+                binding.swipeRefreshLayout.setRefreshing(false);
+            }
         });
 
         homeViewModel.getError().observe(getViewLifecycleOwner(), error -> {
@@ -90,6 +92,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
 
         return root;
+    }
+
+    private void setupSwipeRefreshLayout(HomeViewModel homeViewModel) {
+        // Set the refresh colors to match the app theme
+        binding.swipeRefreshLayout.setColorSchemeResources(
+            R.color.airbnb_primary,
+            R.color.airbnb_secondary,
+            R.color.airbnb_accent
+        );
+        
+        // Set up the refresh listener
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            Log.d("HomeFragment", "Pull-to-refresh triggered");
+            // Reload data when user pulls to refresh
+            homeViewModel.retry();
+        });
     }
 
     private void setupRecyclerView() {
@@ -123,12 +141,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private void setListViewActive() {
         isListView = true;
         binding.buttonList.setBackgroundResource(R.drawable.button_toggle_active_background);
-        binding.buttonList.setTextColor(getResources().getColor(android.R.color.black));
+        binding.buttonList.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black));
         binding.buttonMap.setBackgroundResource(android.R.color.transparent);
-        binding.buttonMap.setTextColor(getResources().getColor(android.R.color.white));
+        binding.buttonMap.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white));
         
         // Show list view, hide map view
-        binding.listContainer.setVisibility(View.VISIBLE);
+        binding.swipeRefreshLayout.setVisibility(View.VISIBLE);
         binding.mapContainer.setVisibility(View.GONE);
     }
 
@@ -136,12 +154,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         Log.d("HomeFragment", "Switching to map view");
         isListView = false;
         binding.buttonMap.setBackgroundResource(R.drawable.button_toggle_active_background);
-        binding.buttonMap.setTextColor(getResources().getColor(android.R.color.black));
+        binding.buttonMap.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black));
         binding.buttonList.setBackgroundResource(android.R.color.transparent);
-        binding.buttonList.setTextColor(getResources().getColor(android.R.color.white));
+        binding.buttonList.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white));
         
         // Hide list view, show map view
-        binding.listContainer.setVisibility(View.GONE);
+        binding.swipeRefreshLayout.setVisibility(View.GONE);
         binding.mapContainer.setVisibility(View.VISIBLE);
         
         Log.d("HomeFragment", "Map container visibility: " + binding.mapContainer.getVisibility());
