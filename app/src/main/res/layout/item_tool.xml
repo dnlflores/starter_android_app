@@ -1,55 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/airbnb_white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tool_name"
+        <!-- Tool Image -->
+        <ImageView
+            android:id="@+id/tool_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/airbnb_light_gray"
+            android:contentDescription="Tool Image"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_launcher_foreground" />
+
+        <!-- Tool Details -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tool Name"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tool_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="$0.00"
-            android:textColor="@android:color/holo_green_dark"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            <!-- Tool Name and Price Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
 
-        <TextView
-            android:id="@+id/tool_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Tool description"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/tool_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tool Name"
+                    android:textColor="@color/airbnb_black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
 
-        <TextView
-            android:id="@+id/tool_owner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Owner: username"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
-            android:textStyle="italic" />
+                <TextView
+                    android:id="@+id/tool_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$0.00"
+                    android:textColor="@color/airbnb_black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium" />
+
+            </LinearLayout>
+
+            <!-- Tool Description -->
+            <TextView
+                android:id="@+id/tool_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Tool description"
+                android:textColor="@color/airbnb_medium_gray"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <!-- Tool Owner -->
+            <TextView
+                android:id="@+id/tool_owner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Owner: username"
+                android:textColor="@color/airbnb_medium_gray"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:drawableStart="@drawable/ic_account_black_24dp"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

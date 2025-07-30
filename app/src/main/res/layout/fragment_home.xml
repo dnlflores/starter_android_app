@@ -118,6 +118,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingTop="0dp"
+        android:background="@color/airbnb_light_background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -130,10 +131,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@color/white"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp"
-                android:paddingTop="32dp"
+                android:background="@color/airbnb_white"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:paddingTop="16dp"
                 android:paddingBottom="24dp">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -179,7 +180,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Failed to load tools"
-        android:textColor="@android:color/holo_red_dark"
+        android:textColor="@color/airbnb_primary"
         android:visibility="gone"
         android:layout_gravity="center" />
 

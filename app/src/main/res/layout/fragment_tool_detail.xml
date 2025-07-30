@@ -4,20 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@color/airbnb_white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         tools:context=".ui.tooldetail.ToolDetailFragment">
 
+        <!-- Tool Image -->
         <ImageView
             android:id="@+id/tool_image"
             android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:layout_marginBottom="16dp"
-            android:background="@color/gray_light"
+            android:layout_height="300dp"
+            android:background="@color/airbnb_light_gray"
             android:contentDescription="Tool Image"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
@@ -25,82 +25,129 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_launcher_foreground" />
 
-        <TextView
-            android:id="@+id/tool_name"
-            android:layout_width="0dp"
+        <!-- Content Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tool_image"
-            tools:text="Hammer" />
+            android:orientation="vertical"
+            android:padding="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/tool_image">
 
-        <TextView
-            android:id="@+id/tool_price"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@android:color/holo_green_dark"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tool_name"
-            tools:text="$25.00" />
+            <!-- Tool Name and Price Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
 
-        <TextView
-            android:id="@+id/tool_description_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Description"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tool_price" />
+                <TextView
+                    android:id="@+id/tool_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/airbnb_black"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    tools:text="Professional Hammer" />
 
-        <TextView
-            android:id="@+id/tool_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tool_description_label"
-            tools:text="A high-quality hammer perfect for construction and DIY projects. Made from durable steel with an ergonomic handle." />
+                <TextView
+                    android:id="@+id/tool_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/airbnb_black"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    tools:text="$25.00" />
 
-        <TextView
-            android:id="@+id/tool_owner_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Owner"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tool_description" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/tool_owner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tool_owner_label"
-            tools:text="john_doe" />
+            <!-- Description Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="About this tool"
+                android:textColor="@color/airbnb_black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="12dp" />
 
+            <TextView
+                android:id="@+id/tool_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/airbnb_medium_gray"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:lineSpacingExtra="4dp"
+                android:layout_marginBottom="24dp"
+                tools:text="A high-quality hammer perfect for construction and DIY projects. Made from durable steel with an ergonomic handle designed for comfort during extended use." />
+
+            <!-- Owner Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Owner"
+                android:textColor="@color/airbnb_black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@color/airbnb_off_white"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_account_black_24dp"
+                    android:background="@color/airbnb_light_gray"
+                    android:padding="8dp"
+                    android:layout_marginEnd="12dp" />
+
+                <TextView
+                    android:id="@+id/tool_owner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/airbnb_black"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    tools:text="john_doe" />
+
+            </LinearLayout>
+
+            <!-- Contact Button -->
+            <Button
+                android:id="@+id/button_contact"
+                style="@style/AirbnbButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Contact Owner"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Rent Button -->
+            <Button
+                android:id="@+id/button_rent"
+                style="@style/AirbnbButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Rent This Tool"
+                android:background="@drawable/airbnb_secondary_button_background"
+                android:textColor="@color/airbnb_white" />
+
+        </LinearLayout>
+
+        <!-- Loading and Error States -->
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
@@ -116,7 +163,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Failed to load tool details"
-            android:textColor="@android:color/holo_red_dark"
+            android:textColor="@color/airbnb_primary"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

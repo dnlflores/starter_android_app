@@ -14,6 +14,27 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!-- Airbnb Style Theme -->
+    <style name="Theme.Starter.Airbnb" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/airbnb_primary</item>
+        <item name="colorPrimaryVariant">@color/airbnb_primary_dark</item>
+        <item name="colorOnPrimary">@color/airbnb_white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/airbnb_secondary</item>
+        <item name="colorSecondaryVariant">@color/airbnb_secondary_dark</item>
+        <item name="colorOnSecondary">@color/airbnb_white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/airbnb_white</item>
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/airbnb_white</item>
+        <item name="colorSurface">@color/airbnb_white</item>
+        <item name="colorOnSurface">@color/airbnb_black</item>
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@color/airbnb_black</item>
+        <item name="android:textColorSecondary">@color/airbnb_medium_gray</item>
+    </style>
+
     <!-- Custom button styles -->
     <style name="CustomButton" parent="Widget.Material3.Button">
         <item name="android:background">@null</item>
@@ -31,5 +52,49 @@
     <style name="ToggleButton" parent="CustomButton">
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Airbnb Style Button -->
+    <style name="AirbnbButton" parent="Widget.Material3.Button">
+        <item name="android:background">@drawable/airbnb_button_background</item>
+        <item name="android:textColor">@color/airbnb_white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- Airbnb Style Text Styles -->
+    <style name="AirbnbText.Title" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">@color/airbnb_black</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="AirbnbText.Subtitle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/airbnb_black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="AirbnbText.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/airbnb_black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="AirbnbText.Caption" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/airbnb_medium_gray</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="AirbnbText.Price" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/airbnb_black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 </resources>

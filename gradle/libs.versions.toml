@@ -16,6 +16,7 @@ gson = "2.10.1"
 cardview = "1.0.0"
 playServicesMaps = "18.2.0"
 playServicesLocation = "21.1.0"
+glide = "4.16.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -35,6 +36,7 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
