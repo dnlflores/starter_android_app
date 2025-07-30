@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,6 +21,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private ToolsAdapter toolsAdapter;
+    private boolean isListView = true;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -33,10 +34,10 @@ public class HomeFragment extends Fragment {
         // Set up RecyclerView
         setupRecyclerView();
 
-        // Observe data from ViewModel
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        // Set up button click listeners
+        setupButtonListeners();
 
+        // Observe data from ViewModel
         homeViewModel.getTools().observe(getViewLifecycleOwner(), tools -> {
             toolsAdapter.setTools(tools);
             binding.recyclerViewTools.setVisibility(tools != null && !tools.isEmpty() ? View.VISIBLE : View.GONE);
@@ -63,6 +64,45 @@ public class HomeFragment extends Fragment {
         toolsAdapter.setOnToolClickListener(this::onToolClick);
         binding.recyclerViewTools.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewTools.setAdapter(toolsAdapter);
+    }
+
+    private void setupButtonListeners() {
+        // Filters button
+        binding.buttonFilters.setOnClickListener(v -> {
+            // TODO: Implement filters functionality
+            // For now, just show a toast or navigate to filters screen
+        });
+
+        // List/Map toggle
+        binding.buttonList.setOnClickListener(v -> {
+            if (!isListView) {
+                setListViewActive();
+            }
+        });
+
+        binding.buttonMap.setOnClickListener(v -> {
+            if (isListView) {
+                setMapViewActive();
+            }
+        });
+    }
+
+    private void setListViewActive() {
+        isListView = true;
+        binding.buttonList.setBackgroundResource(R.drawable.button_toggle_active_background);
+        binding.buttonList.setTextColor(getResources().getColor(android.R.color.black));
+        binding.buttonMap.setBackgroundResource(android.R.color.transparent);
+        binding.buttonMap.setTextColor(getResources().getColor(android.R.color.white));
+        // TODO: Switch to list view
+    }
+
+    private void setMapViewActive() {
+        isListView = false;
+        binding.buttonMap.setBackgroundResource(R.drawable.button_toggle_active_background);
+        binding.buttonMap.setTextColor(getResources().getColor(android.R.color.black));
+        binding.buttonList.setBackgroundResource(android.R.color.transparent);
+        binding.buttonList.setTextColor(getResources().getColor(android.R.color.white));
+        // TODO: Switch to map view
     }
     
     private void onToolClick(Tool tool) {
