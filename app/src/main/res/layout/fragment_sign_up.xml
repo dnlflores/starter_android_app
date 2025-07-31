@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/auth_gradient_background"
     android:fillViewport="true"
+    android:paddingBottom="160dp"
+    android:clipToPadding="false"
     tools:context=".ui.auth.SignUpFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +16,7 @@
         android:layout_marginTop="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="120dp"
         android:background="@drawable/auth_card_background"
         android:padding="32dp">
 
@@ -123,7 +125,7 @@
         <EditText
             android:id="@+id/editTextUsername"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="46dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/auth_input_background"
             android:hint="@string/username"
@@ -151,7 +153,7 @@
         <EditText
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="46dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/auth_input_background"
             android:hint="@string/email"
@@ -179,7 +181,7 @@
         <EditText
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="46dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/auth_input_background"
             android:hint="@string/password"
@@ -240,7 +242,7 @@
         <EditText
             android:id="@+id/editTextStreetAddress"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="46dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/auth_input_background"
             android:hint="@string/street_address"
@@ -283,7 +285,7 @@
         <EditText
             android:id="@+id/editTextCity"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="46dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/auth_input_background"
@@ -301,7 +303,7 @@
         <EditText
             android:id="@+id/editTextState"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="46dp"
             android:layout_marginStart="8dp"
             android:background="@drawable/auth_input_background"
             android:hint="@string/state"
@@ -347,7 +349,7 @@
         <EditText
             android:id="@+id/editTextZipCode"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="46dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/auth_input_background"
@@ -365,7 +367,7 @@
         <EditText
             android:id="@+id/editTextPhone"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="46dp"
             android:layout_marginStart="8dp"
             android:background="@drawable/auth_input_background"
             android:hint="@string/phone"
@@ -384,7 +386,7 @@
         <Button
             android:id="@+id/buttonSignUp"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="46dp"
             android:text="@string/create_account"
             android:textSize="16sp"
             android:textStyle="bold"
