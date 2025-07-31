@@ -31,6 +31,7 @@
     <string name="authentication_required">Authentication Required</string>
     <string name="please_sign_in">Please sign in to access this feature</string>
     <string name="dont_have_account_sign_up">Don\'t have an account? Sign Up</string>
+    <string name="already_have_account_sign_in">Already have an account? Sign In</string>
     <string name="account_information">Account Information</string>
     <string name="address_information">Address Information</string>
     <string name="street_address">Street Address</string>

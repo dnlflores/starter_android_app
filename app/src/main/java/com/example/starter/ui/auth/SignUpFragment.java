@@ -183,6 +183,13 @@ public class SignUpFragment extends Fragment {
                 signUpViewModel.signUp(username, email, password, streetAddress, city, state, zipCode, phone);
             }
         });
+
+        binding.textViewSignIn.setOnClickListener(v -> {
+            // Navigate back to login fragment
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     private boolean validateForm() {
