@@ -39,13 +39,13 @@ public class LoginFragment extends Fragment {
 
     private void setupUI() {
         // Add text change listeners for real-time validation
-        binding.editTextEmail.addTextChangedListener(new TextWatcher() {
+        binding.editTextUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                validateEmail();
+                validateUsername();
             }
 
             @Override
@@ -70,7 +70,6 @@ public class LoginFragment extends Fragment {
         loginViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
             binding.buttonLogin.setEnabled(!isLoading);
-            binding.buttonSignUp.setEnabled(!isLoading);
         });
 
         loginViewModel.getError().observe(getViewLifecycleOwner(), error -> {
@@ -96,13 +95,13 @@ public class LoginFragment extends Fragment {
     private void setupClickListeners() {
         binding.buttonLogin.setOnClickListener(v -> {
             if (validateForm()) {
-                String email = binding.editTextEmail.getText().toString().trim();
+                String username = binding.editTextUsername.getText().toString().trim();
                 String password = binding.editTextPassword.getText().toString();
-                loginViewModel.login(email, password);
+                loginViewModel.login(username, password);
             }
         });
 
-        binding.buttonSignUp.setOnClickListener(v -> {
+        binding.textViewSignUp.setOnClickListener(v -> {
             // Navigate to sign up fragment
             Navigation.findNavController(requireView()).navigate(R.id.action_login_to_signup);
         });
@@ -116,7 +115,7 @@ public class LoginFragment extends Fragment {
     private boolean validateForm() {
         boolean isValid = true;
 
-        if (!validateEmail()) {
+        if (!validateUsername()) {
             isValid = false;
         }
 
@@ -127,16 +126,13 @@ public class LoginFragment extends Fragment {
         return isValid;
     }
 
-    private boolean validateEmail() {
-        String email = binding.editTextEmail.getText().toString().trim();
-        if (email.isEmpty()) {
-            binding.textInputLayoutEmail.setError("Email is required");
-            return false;
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.textInputLayoutEmail.setError("Please enter a valid email address");
+    private boolean validateUsername() {
+        String username = binding.editTextUsername.getText().toString().trim();
+        if (username.isEmpty()) {
+            binding.editTextUsername.setError("Username is required");
             return false;
         } else {
-            binding.textInputLayoutEmail.setError(null);
+            binding.editTextUsername.setError(null);
             return true;
         }
     }
@@ -144,13 +140,13 @@ public class LoginFragment extends Fragment {
     private boolean validatePassword() {
         String password = binding.editTextPassword.getText().toString();
         if (password.isEmpty()) {
-            binding.textInputLayoutPassword.setError("Password is required");
+            binding.editTextPassword.setError("Password is required");
             return false;
         } else if (password.length() < 6) {
-            binding.textInputLayoutPassword.setError("Password must be at least 6 characters");
+            binding.editTextPassword.setError("Password must be at least 6 characters");
             return false;
         } else {
-            binding.textInputLayoutPassword.setError(null);
+            binding.editTextPassword.setError(null);
             return true;
         }
     }

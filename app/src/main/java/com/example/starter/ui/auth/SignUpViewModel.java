@@ -44,18 +44,18 @@ public class SignUpViewModel extends AndroidViewModel {
         return signUpSuccess;
     }
 
-    public void signUp(String firstName, String lastName, String email, String password) {
+    public void signUp(String username, String email, String password, String streetAddress, String city, String state, String zipCode, String phone) {
         isLoading.setValue(true);
         error.setValue(null);
 
         // Use mock service for testing
-        MockAuthService.signUp(firstName, lastName, email, password, new MockAuthService.AuthCallback<SignUpResponse>() {
+        MockAuthService.signUp(username, email, password, streetAddress, city, state, zipCode, phone, new MockAuthService.AuthCallback<SignUpResponse>() {
             @Override
             public void onSuccess(SignUpResponse response) {
                 isLoading.setValue(false);
                 signUpSuccess.setValue(true);
                 
-                Log.d("SignUpViewModel", "Sign up successful for user: " + email);
+                Log.d("SignUpViewModel", "Sign up successful for user: " + username);
             }
 
             @Override

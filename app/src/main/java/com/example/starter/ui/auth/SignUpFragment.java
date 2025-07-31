@@ -37,26 +37,13 @@ public class SignUpFragment extends Fragment {
 
     private void setupUI() {
         // Add text change listeners for real-time validation
-        binding.editTextFirstName.addTextChangedListener(new TextWatcher() {
+        binding.editTextUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                validateFirstName();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-
-        binding.editTextLastName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                validateLastName();
+                validateUsername();
             }
 
             @Override
@@ -89,13 +76,65 @@ public class SignUpFragment extends Fragment {
             public void afterTextChanged(Editable s) {}
         });
 
-        binding.editTextConfirmPassword.addTextChangedListener(new TextWatcher() {
+        binding.editTextStreetAddress.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                validateConfirmPassword();
+                validateStreetAddress();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        binding.editTextCity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                validateCity();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        binding.editTextState.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                validateState();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        binding.editTextZipCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                validateZipCode();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        binding.editTextPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                validatePhone();
             }
 
             @Override
@@ -107,7 +146,6 @@ public class SignUpFragment extends Fragment {
         signUpViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
             binding.buttonSignUp.setEnabled(!isLoading);
-            binding.buttonLogin.setEnabled(!isLoading);
         });
 
         signUpViewModel.getError().observe(getViewLifecycleOwner(), error -> {
@@ -133,19 +171,16 @@ public class SignUpFragment extends Fragment {
     private void setupClickListeners() {
         binding.buttonSignUp.setOnClickListener(v -> {
             if (validateForm()) {
-                String firstName = binding.editTextFirstName.getText().toString().trim();
-                String lastName = binding.editTextLastName.getText().toString().trim();
+                String username = binding.editTextUsername.getText().toString().trim();
                 String email = binding.editTextEmail.getText().toString().trim();
                 String password = binding.editTextPassword.getText().toString();
+                String streetAddress = binding.editTextStreetAddress.getText().toString().trim();
+                String city = binding.editTextCity.getText().toString().trim();
+                String state = binding.editTextState.getText().toString().trim();
+                String zipCode = binding.editTextZipCode.getText().toString().trim();
+                String phone = binding.editTextPhone.getText().toString().trim();
                 
-                signUpViewModel.signUp(firstName, lastName, email, password);
-            }
-        });
-
-        binding.buttonLogin.setOnClickListener(v -> {
-            // Navigate back to login fragment
-            if (getActivity() != null) {
-                getActivity().onBackPressed();
+                signUpViewModel.signUp(username, email, password, streetAddress, city, state, zipCode, phone);
             }
         });
     }
@@ -153,11 +188,7 @@ public class SignUpFragment extends Fragment {
     private boolean validateForm() {
         boolean isValid = true;
 
-        if (!validateFirstName()) {
-            isValid = false;
-        }
-
-        if (!validateLastName()) {
+        if (!validateUsername()) {
             isValid = false;
         }
 
@@ -169,31 +200,36 @@ public class SignUpFragment extends Fragment {
             isValid = false;
         }
 
-        if (!validateConfirmPassword()) {
+        if (!validateStreetAddress()) {
+            isValid = false;
+        }
+
+        if (!validateCity()) {
+            isValid = false;
+        }
+
+        if (!validateState()) {
+            isValid = false;
+        }
+
+        if (!validateZipCode()) {
+            isValid = false;
+        }
+
+        if (!validatePhone()) {
             isValid = false;
         }
 
         return isValid;
     }
 
-    private boolean validateFirstName() {
-        String firstName = binding.editTextFirstName.getText().toString().trim();
-        if (firstName.isEmpty()) {
-            binding.textInputLayoutFirstName.setError("First name is required");
+    private boolean validateUsername() {
+        String username = binding.editTextUsername.getText().toString().trim();
+        if (username.isEmpty()) {
+            binding.editTextUsername.setError("Username is required");
             return false;
         } else {
-            binding.textInputLayoutFirstName.setError(null);
-            return true;
-        }
-    }
-
-    private boolean validateLastName() {
-        String lastName = binding.editTextLastName.getText().toString().trim();
-        if (lastName.isEmpty()) {
-            binding.textInputLayoutLastName.setError("Last name is required");
-            return false;
-        } else {
-            binding.textInputLayoutLastName.setError(null);
+            binding.editTextUsername.setError(null);
             return true;
         }
     }
@@ -201,13 +237,13 @@ public class SignUpFragment extends Fragment {
     private boolean validateEmail() {
         String email = binding.editTextEmail.getText().toString().trim();
         if (email.isEmpty()) {
-            binding.textInputLayoutEmail.setError("Email is required");
+            binding.editTextEmail.setError("Email is required");
             return false;
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.textInputLayoutEmail.setError("Please enter a valid email address");
+            binding.editTextEmail.setError("Please enter a valid email address");
             return false;
         } else {
-            binding.textInputLayoutEmail.setError(null);
+            binding.editTextEmail.setError(null);
             return true;
         }
     }
@@ -215,29 +251,68 @@ public class SignUpFragment extends Fragment {
     private boolean validatePassword() {
         String password = binding.editTextPassword.getText().toString();
         if (password.isEmpty()) {
-            binding.textInputLayoutPassword.setError("Password is required");
+            binding.editTextPassword.setError("Password is required");
             return false;
         } else if (password.length() < 6) {
-            binding.textInputLayoutPassword.setError("Password must be at least 6 characters");
+            binding.editTextPassword.setError("Password must be at least 6 characters");
             return false;
         } else {
-            binding.textInputLayoutPassword.setError(null);
+            binding.editTextPassword.setError(null);
             return true;
         }
     }
 
-    private boolean validateConfirmPassword() {
-        String password = binding.editTextPassword.getText().toString();
-        String confirmPassword = binding.editTextConfirmPassword.getText().toString();
-        
-        if (confirmPassword.isEmpty()) {
-            binding.textInputLayoutConfirmPassword.setError("Please confirm your password");
-            return false;
-        } else if (!password.equals(confirmPassword)) {
-            binding.textInputLayoutConfirmPassword.setError("Passwords do not match");
+    private boolean validateStreetAddress() {
+        String streetAddress = binding.editTextStreetAddress.getText().toString().trim();
+        if (streetAddress.isEmpty()) {
+            binding.editTextStreetAddress.setError("Street address is required");
             return false;
         } else {
-            binding.textInputLayoutConfirmPassword.setError(null);
+            binding.editTextStreetAddress.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateCity() {
+        String city = binding.editTextCity.getText().toString().trim();
+        if (city.isEmpty()) {
+            binding.editTextCity.setError("City is required");
+            return false;
+        } else {
+            binding.editTextCity.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateState() {
+        String state = binding.editTextState.getText().toString().trim();
+        if (state.isEmpty()) {
+            binding.editTextState.setError("State is required");
+            return false;
+        } else {
+            binding.editTextState.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateZipCode() {
+        String zipCode = binding.editTextZipCode.getText().toString().trim();
+        if (zipCode.isEmpty()) {
+            binding.editTextZipCode.setError("ZIP code is required");
+            return false;
+        } else {
+            binding.editTextZipCode.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validatePhone() {
+        String phone = binding.editTextPhone.getText().toString().trim();
+        if (phone.isEmpty()) {
+            binding.editTextPhone.setError("Phone number is required");
+            return false;
+        } else {
+            binding.editTextPhone.setError(null);
             return true;
         }
     }

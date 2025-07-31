@@ -18,19 +18,14 @@ public class MockAuthService {
         void onError(String error);
     }
     
-    public static void login(String email, String password, AuthCallback<LoginResponse> callback) {
-        Log.d(TAG, "Mock login attempt for: " + email);
+    public static void login(String username, String password, AuthCallback<LoginResponse> callback) {
+        Log.d(TAG, "Mock login attempt for: " + username);
         
         // Simulate network delay
         handler.postDelayed(() -> {
             // Mock validation
-            if (email.isEmpty() || password.isEmpty()) {
-                callback.onError("Email and password are required");
-                return;
-            }
-            
-            if (!email.contains("@")) {
-                callback.onError("Invalid email format");
+            if (username.isEmpty() || password.isEmpty()) {
+                callback.onError("Username and password are required");
                 return;
             }
             
@@ -40,24 +35,24 @@ public class MockAuthService {
             }
             
             // Mock successful login
-            User user = new User(1, email.split("@")[0], email, "John", "Doe");
+            User user = new User(1, username, username + "@example.com", "John", "Doe");
             LoginResponse response = new LoginResponse();
             response.setUser(user);
             response.setToken("mock_token_" + System.currentTimeMillis());
             
-            Log.d(TAG, "Mock login successful for: " + email);
+            Log.d(TAG, "Mock login successful for: " + username);
             callback.onSuccess(response);
         }, 1500); // 1.5 second delay
     }
     
-    public static void signUp(String firstName, String lastName, String email, String password, AuthCallback<SignUpResponse> callback) {
-        Log.d(TAG, "Mock signup attempt for: " + email);
+    public static void signUp(String username, String email, String password, String streetAddress, String city, String state, String zipCode, String phone, AuthCallback<SignUpResponse> callback) {
+        Log.d(TAG, "Mock signup attempt for: " + username);
         
         // Simulate network delay
         handler.postDelayed(() -> {
             // Mock validation
-            if (firstName.isEmpty() || lastName.isEmpty()) {
-                callback.onError("First name and last name are required");
+            if (username.isEmpty()) {
+                callback.onError("Username is required");
                 return;
             }
             
@@ -71,12 +66,17 @@ public class MockAuthService {
                 return;
             }
             
+            if (streetAddress.isEmpty() || city.isEmpty() || state.isEmpty() || zipCode.isEmpty() || phone.isEmpty()) {
+                callback.onError("All address fields are required");
+                return;
+            }
+            
             // Mock successful signup
             SignUpResponse response = new SignUpResponse();
             response.setMessage("Account created successfully");
             response.setUserId((int) System.currentTimeMillis());
             
-            Log.d(TAG, "Mock signup successful for: " + email);
+            Log.d(TAG, "Mock signup successful for: " + username);
             callback.onSuccess(response);
         }, 1500); // 1.5 second delay
     }

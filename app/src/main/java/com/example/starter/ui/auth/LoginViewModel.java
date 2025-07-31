@@ -48,12 +48,12 @@ public class LoginViewModel extends AndroidViewModel {
         return loginSuccess;
     }
 
-    public void login(String email, String password) {
+    public void login(String username, String password) {
         isLoading.setValue(true);
         error.setValue(null);
 
         // Use mock service for testing
-        MockAuthService.login(email, password, new MockAuthService.AuthCallback<LoginResponse>() {
+        MockAuthService.login(username, password, new MockAuthService.AuthCallback<LoginResponse>() {
             @Override
             public void onSuccess(LoginResponse response) {
                 isLoading.setValue(false);
