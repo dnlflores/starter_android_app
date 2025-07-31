@@ -39,4 +39,33 @@
     <string name="state">State</string>
     <string name="zip_code">ZIP Code</string>
     <string name="phone">Phone</string>
+    
+    <!-- Post Fragment Strings -->
+    <string name="create_new_listing">Create New Listing</string>
+    <string name="share_tools_community">Share your tools with the community</string>
+    <string name="basic_information">Basic Information</string>
+    <string name="tool_name">Tool Name</string>
+    <string name="tool_name_hint">Power Drill, Ladder, Lawn Mower</string>
+    <string name="description">Description</string>
+    <string name="description_hint">Describe your tool\'s condition, features, and any special instructions...</string>
+    <string name="photo">Photo</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="photo_added">Photo Added ✓</string>
+    <string name="location">Location</string>
+    <string name="address">Address</string>
+    <string name="address_hint">Where is your tool located?</string>
+    <string name="pricing">Pricing</string>
+    <string name="daily_rental_price">Daily Rental Price</string>
+    <string name="price_hint">$0.00</string>
+    <string name="publish_listing">Publish Listing</string>
+    <string name="select_image_source">Select Image Source</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera_permission_required">Camera permission required</string>
+    <string name="error_loading_image">Error loading image</string>
+    <string name="listing_published_successfully">Listing published successfully!</string>
+    <string name="tool_name_required">Tool name is required</string>
+    <string name="description_required">Description is required</string>
+    <string name="address_required">Address is required</string>
+    <string name="invalid_price_format">Invalid price format</string>
 </resources>
