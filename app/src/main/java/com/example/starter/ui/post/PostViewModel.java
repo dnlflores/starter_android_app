@@ -5,12 +5,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.starter.model.AddressResult;
 import com.example.starter.model.Tool;
 
 public class PostViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
     private final MutableLiveData<Bitmap> selectedImage;
+    private final MutableLiveData<AddressResult> selectedAddress;
     private final MutableLiveData<Boolean> isLoading;
     private final MutableLiveData<String> errorMessage;
 
@@ -19,6 +21,7 @@ public class PostViewModel extends ViewModel {
         mText.setValue("Create New Listing");
         
         selectedImage = new MutableLiveData<>();
+        selectedAddress = new MutableLiveData<>();
         isLoading = new MutableLiveData<>(false);
         errorMessage = new MutableLiveData<>();
     }
@@ -29,6 +32,10 @@ public class PostViewModel extends ViewModel {
 
     public LiveData<Bitmap> getSelectedImage() {
         return selectedImage;
+    }
+
+    public LiveData<AddressResult> getSelectedAddress() {
+        return selectedAddress;
     }
 
     public LiveData<Boolean> getIsLoading() {
@@ -43,6 +50,10 @@ public class PostViewModel extends ViewModel {
         selectedImage.setValue(image);
     }
 
+    public void setSelectedAddress(AddressResult address) {
+        selectedAddress.setValue(address);
+    }
+
     public void createTool(String name, String description, String address, double price) {
         isLoading.setValue(true);
         
@@ -51,6 +62,14 @@ public class PostViewModel extends ViewModel {
         tool.setName(name);
         tool.setDescription(description);
         tool.setPrice(price);
+        
+        // Set coordinates if address was selected
+        AddressResult selectedAddressValue = selectedAddress.getValue();
+        if (selectedAddressValue != null) {
+            tool.setLatitude(selectedAddressValue.getLatitude());
+            tool.setLongitude(selectedAddressValue.getLongitude());
+        }
+        
         // Note: owner_id will be set when we have user authentication
         
         // TODO: Send tool to backend API
@@ -75,6 +94,7 @@ public class PostViewModel extends ViewModel {
 
     public void clearForm() {
         selectedImage.setValue(null);
+        selectedAddress.setValue(null);
         errorMessage.setValue(null);
     }
 } 

@@ -68,4 +68,11 @@
     <string name="description_required">Description is required</string>
     <string name="address_required">Address is required</string>
     <string name="invalid_price_format">Invalid price format</string>
+    
+    <!-- Address Search Strings -->
+    <string name="where_is_your_tool">Where is your tool located?</string>
+    <string name="enter_address">Enter an address</string>
+    <string name="no_addresses_found">No addresses found</string>
+    <string name="searching_addresses">Searching addresses...</string>
+    <string name="error_geocoding">Error finding address</string>
 </resources>

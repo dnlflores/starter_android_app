@@ -19,9 +19,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.example.starter.R;
 import com.example.starter.databinding.FragmentPostBinding;
+import com.example.starter.model.AddressResult;
 import com.example.starter.ui.auth.AuthAwareFragment;
 import com.example.starter.ui.auth.AuthSplashFragment;
 
@@ -43,6 +45,7 @@ public class PostFragment extends AuthAwareFragment {
         
         setupActivityResultLaunchers();
         setupClickListeners();
+        setupFragmentResultListener();
         
         return binding.getRoot();
     }
@@ -111,6 +114,15 @@ public class PostFragment extends AuthAwareFragment {
         binding.btnPublish.setOnClickListener(v -> {
             publishListing();
         });
+
+        // Setup address input click listener for Airbnb-style interaction
+        binding.etAddress.setOnClickListener(v -> {
+            showAddressSearchFragment();
+        });
+        
+        // Make address input non-editable to force the search experience
+        binding.etAddress.setFocusable(false);
+        binding.etAddress.setFocusableInTouchMode(false);
     }
 
     private void checkCameraPermission() {
@@ -200,7 +212,31 @@ public class PostFragment extends AuthAwareFragment {
         binding.etAddress.setText("");
         binding.etPrice.setText("");
         postViewModel.setSelectedImage(null);
+        postViewModel.setSelectedAddress(null);
         updatePhotoButton();
+    }
+
+    private void showAddressSearchFragment() {
+        // Use Navigation Component to navigate to address search
+        Navigation.findNavController(requireView())
+            .navigate(R.id.action_post_to_address_search);
+    }
+
+    private void setupFragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(
+            AddressSearchFragment.ARG_ADDRESS_RESULT,
+            this,
+            (requestKey, result) -> {
+                AddressResult address = result.getParcelable(AddressSearchFragment.ARG_ADDRESS_RESULT);
+                if (address != null) {
+                    // Update the address input with the selected address
+                    binding.etAddress.setText(address.getFullAddress());
+                    
+                    // Store the coordinates in the ViewModel
+                    postViewModel.setSelectedAddress(address);
+                }
+            }
+        );
     }
 
     @Override
