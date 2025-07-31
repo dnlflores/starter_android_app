@@ -48,5 +48,39 @@
             android:name="tool_id"
             app:argType="integer" />
     </fragment>
+
+    <!-- Auth Fragments -->
+    <fragment
+        android:id="@+id/navigation_auth_splash"
+        android:name="com.example.starter.ui.auth.AuthSplashFragment"
+        android:label="Authentication Required"
+        tools:layout="@layout/fragment_chat_auth_required">
+        <argument
+            android:name="tab_type"
+            app:argType="string"
+            android:defaultValue="CHAT" />
+        <action
+            android:id="@+id/action_auth_splash_to_login"
+            app:destination="@id/navigation_login" />
+        <action
+            android:id="@+id/action_auth_splash_to_signup"
+            app:destination="@id/navigation_signup" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_login"
+        android:name="com.example.starter.ui.auth.LoginFragment"
+        android:label="Sign In"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_signup"
+            app:destination="@id/navigation_signup" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_signup"
+        android:name="com.example.starter.ui.auth.SignUpFragment"
+        android:label="Create Account"
+        tools:layout="@layout/fragment_sign_up" />
     
 </navigation>

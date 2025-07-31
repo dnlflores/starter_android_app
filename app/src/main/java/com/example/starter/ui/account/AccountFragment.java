@@ -7,28 +7,38 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.starter.R;
 import com.example.starter.databinding.FragmentAccountBinding;
 import com.example.starter.model.User;
+import com.example.starter.ui.auth.AuthAwareFragment;
+import com.example.starter.ui.auth.AuthSplashFragment;
 
-public class AccountFragment extends Fragment {
+public class AccountFragment extends AuthAwareFragment {
 
     private FragmentAccountBinding binding;
     private AccountViewModel accountViewModel;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
-
         binding = FragmentAccountBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        return binding.getRoot();
+    }
 
-        setupObservers();
-        setupClickListeners();
-        
-        return root;
+    @Override
+    protected void showAuthenticatedContent() {
+        if (binding != null) {
+            setupObservers();
+            setupClickListeners();
+        }
+    }
+    
+    @Override
+    protected AuthSplashFragment.TabType getTabType() {
+        return AuthSplashFragment.TabType.ACCOUNT;
     }
 
     private void setupObservers() {
@@ -67,15 +77,17 @@ public class AccountFragment extends Fragment {
         binding.helpCenterRow.setOnClickListener(v -> 
             Toast.makeText(getContext(), "Help Center clicked", Toast.LENGTH_SHORT).show());
         
-        binding.logoutRow.setOnClickListener(v -> 
-            Toast.makeText(getContext(), "Log Out clicked", Toast.LENGTH_SHORT).show());
+        binding.logoutRow.setOnClickListener(v -> {
+            authManager.logout();
+            Toast.makeText(getContext(), "Logged out successfully", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void displayUser(User user) {
         if (user == null) return;
         
         binding.textAccount.setText("Welcome back!");
-        binding.usernameText.setText(user.getUsername());
+        binding.usernameText.setText(user.getFullName());
         binding.userIdText.setText("ID: " + user.getId());
     }
 

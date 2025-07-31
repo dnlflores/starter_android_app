@@ -41,4 +41,9 @@
     <color name="tool_detail_red">#FF4444</color>
     <color name="tool_detail_green">#4CAF50</color>
     <color name="tool_detail_gray">#9E9E9E</color>
+    
+    <!-- Authentication Colors -->
+    <color name="auth_card_background">#8B4513</color>
+    <color name="auth_gradient_start">#FF5722</color>
+    <color name="auth_gradient_end">#FF9800</color>
 </resources>

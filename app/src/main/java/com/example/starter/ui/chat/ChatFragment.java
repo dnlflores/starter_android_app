@@ -7,26 +7,37 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.starter.R;
 import com.example.starter.databinding.FragmentChatBinding;
+import com.example.starter.ui.auth.AuthAwareFragment;
+import com.example.starter.ui.auth.AuthSplashFragment;
 
-public class ChatFragment extends Fragment {
+public class ChatFragment extends AuthAwareFragment {
 
     private FragmentChatBinding binding;
+    private ChatViewModel chatViewModel;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ChatViewModel chatViewModel =
-                new ViewModelProvider(this).get(ChatViewModel.class);
-
+        chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
         binding = FragmentChatBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        return binding.getRoot();
+    }
 
-        final TextView textView = binding.textChat;
-        chatViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+    @Override
+    protected void showAuthenticatedContent() {
+        if (binding != null) {
+            final TextView textView = binding.textChat;
+            chatViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        }
+    }
+    
+    @Override
+    protected AuthSplashFragment.TabType getTabType() {
+        return AuthSplashFragment.TabType.CHAT;
     }
 
     @Override

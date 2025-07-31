@@ -7,26 +7,37 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.starter.R;
 import com.example.starter.databinding.FragmentListingsBinding;
+import com.example.starter.ui.auth.AuthAwareFragment;
+import com.example.starter.ui.auth.AuthSplashFragment;
 
-public class ListingsFragment extends Fragment {
+public class ListingsFragment extends AuthAwareFragment {
 
     private FragmentListingsBinding binding;
+    private ListingsViewModel listingsViewModel;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ListingsViewModel listingsViewModel =
-                new ViewModelProvider(this).get(ListingsViewModel.class);
-
+        listingsViewModel = new ViewModelProvider(this).get(ListingsViewModel.class);
         binding = FragmentListingsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        return binding.getRoot();
+    }
 
-        final TextView textView = binding.textListings;
-        listingsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+    @Override
+    protected void showAuthenticatedContent() {
+        if (binding != null) {
+            final TextView textView = binding.textListings;
+            listingsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        }
+    }
+    
+    @Override
+    protected AuthSplashFragment.TabType getTabType() {
+        return AuthSplashFragment.TabType.LISTINGS;
     }
 
     @Override

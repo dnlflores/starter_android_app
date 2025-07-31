@@ -7,26 +7,37 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.starter.R;
 import com.example.starter.databinding.FragmentPostBinding;
+import com.example.starter.ui.auth.AuthAwareFragment;
+import com.example.starter.ui.auth.AuthSplashFragment;
 
-public class PostFragment extends Fragment {
+public class PostFragment extends AuthAwareFragment {
 
     private FragmentPostBinding binding;
+    private PostViewModel postViewModel;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        PostViewModel postViewModel =
-                new ViewModelProvider(this).get(PostViewModel.class);
-
+        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
         binding = FragmentPostBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        return binding.getRoot();
+    }
 
-        final TextView textView = binding.textPost;
-        postViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+    @Override
+    protected void showAuthenticatedContent() {
+        if (binding != null) {
+            final TextView textView = binding.textPost;
+            postViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        }
+    }
+    
+    @Override
+    protected AuthSplashFragment.TabType getTabType() {
+        return AuthSplashFragment.TabType.POST;
     }
 
     @Override
