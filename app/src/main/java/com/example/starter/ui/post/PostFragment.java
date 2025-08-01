@@ -331,9 +331,28 @@ public class PostFragment extends Fragment implements AddressSearchAdapter.OnAdd
             }
         });
         
+        // Back button in address search
+        binding.btnBackSearch.setOnClickListener(v -> {
+            System.out.println("Back button clicked!");
+            collapseAddressSearch();
+        });
+        
         // Add photo button click
         binding.btnAddPhoto.setOnClickListener(v -> {
             showPhotoSelectionDialog();
+        });
+        
+        // Close button in header
+        binding.btnClose.setOnClickListener(v -> {
+            // Navigate back or close the fragment
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
+        });
+        
+        // Publish button
+        binding.btnPublish.setOnClickListener(v -> {
+            publishListing();
         });
     }
 
@@ -590,6 +609,72 @@ public class PostFragment extends Fragment implements AddressSearchAdapter.OnAdd
     
     public boolean hasPhotoSelected() {
         return selectedImageBitmap != null;
+    }
+    
+    private void publishListing() {
+        // Get form data
+        String toolName = binding.etToolName.getText().toString().trim();
+        String description = binding.etDescription.getText().toString().trim();
+        String address = binding.etAddressCollapsed.getText().toString().trim();
+        String priceText = binding.etPrice.getText().toString().trim();
+        
+        // Validate form
+        if (toolName.isEmpty()) {
+            Toast.makeText(requireContext(), "Please enter a tool name", Toast.LENGTH_SHORT).show();
+            binding.etToolName.requestFocus();
+            return;
+        }
+        
+        if (description.isEmpty()) {
+            Toast.makeText(requireContext(), "Please enter a description", Toast.LENGTH_SHORT).show();
+            binding.etDescription.requestFocus();
+            return;
+        }
+        
+        if (address.isEmpty()) {
+            Toast.makeText(requireContext(), "Please select an address", Toast.LENGTH_SHORT).show();
+            binding.collapsedAddressInput.requestFocus();
+            return;
+        }
+        
+        if (priceText.isEmpty()) {
+            Toast.makeText(requireContext(), "Please enter a price", Toast.LENGTH_SHORT).show();
+            binding.etPrice.requestFocus();
+            return;
+        }
+        
+        double price;
+        try {
+            price = Double.parseDouble(priceText);
+        } catch (NumberFormatException e) {
+            Toast.makeText(requireContext(), "Please enter a valid price", Toast.LENGTH_SHORT).show();
+            binding.etPrice.requestFocus();
+            return;
+        }
+        
+        // Show loading state
+        binding.btnPublish.setEnabled(false);
+        binding.btnPublish.setText("Publishing...");
+        
+        // TODO: Implement actual API call to create listing
+        // For now, just show success message
+        Toast.makeText(requireContext(), "Listing published successfully!", Toast.LENGTH_LONG).show();
+        
+        // Reset form
+        binding.etToolName.setText("");
+        binding.etDescription.setText("");
+        binding.etAddressCollapsed.setText("");
+        binding.etPrice.setText("");
+        resetPhotoButton();
+        
+        // Reset button state
+        binding.btnPublish.setEnabled(true);
+        binding.btnPublish.setText(getString(R.string.publish_listing));
+        
+        // Navigate back
+        if (getActivity() != null) {
+            getActivity().onBackPressed();
+        }
     }
 
     @Override
