@@ -454,6 +454,7 @@ public class PostFragment extends Fragment implements AddressSearchAdapter.OnAdd
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        
         if (requestCode == 1001) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getCurrentLocation();
@@ -462,21 +463,61 @@ public class PostFragment extends Fragment implements AddressSearchAdapter.OnAdd
             }
         } else if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Camera permission granted, open camera immediately
+                Toast.makeText(requireContext(), "Camera permission granted", Toast.LENGTH_SHORT).show();
                 openCamera();
             } else {
-                Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_LONG).show();
+                // Camera permission denied
+                if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA)) {
+                    // User denied but didn't check "Don't ask again"
+                    Toast.makeText(requireContext(), "Camera permission is required to take photos", Toast.LENGTH_LONG).show();
+                } else {
+                    // User denied and checked "Don't ask again" - show settings dialog
+                    showPermissionSettingsDialog("Camera", "camera");
+                }
             }
         } else if (requestCode == REQUEST_STORAGE_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Storage permission granted, open gallery immediately
+                Toast.makeText(requireContext(), "Gallery access granted", Toast.LENGTH_SHORT).show();
                 openGallery();
             } else {
-                Toast.makeText(requireContext(), "Storage permission denied", Toast.LENGTH_LONG).show();
+                // Storage permission denied
+                String permissionName = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU 
+                    ? Manifest.permission.READ_MEDIA_IMAGES 
+                    : Manifest.permission.READ_EXTERNAL_STORAGE;
+                
+                if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permissionName)) {
+                    // User denied but didn't check "Don't ask again"
+                    Toast.makeText(requireContext(), "Photo access permission is required to select images", Toast.LENGTH_LONG).show();
+                } else {
+                    // User denied and checked "Don't ask again" - show settings dialog
+                    showPermissionSettingsDialog("Photo Access", "storage");
+                }
             }
         }
     }
     
+    private void showPermissionSettingsDialog(String permissionType, String permissionKey) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+        builder.setTitle(permissionType + " Permission Required");
+        builder.setMessage(permissionType + " permission is required for this feature. Please enable it in Settings > Apps > " + 
+                          getString(R.string.app_name) + " > Permissions.");
+        builder.setPositiveButton("Open Settings", (dialog, which) -> {
+            // Open app settings
+            Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(android.net.Uri.fromParts("package", requireContext().getPackageName(), null));
+            startActivity(intent);
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.dismiss();
+        });
+        builder.show();
+    }
+    
     // Photo selection methods
     private void showPhotoSelectionDialog() {
+        // Always show camera option - let the system handle if camera is actually available
         String[] options;
         if (selectedImageBitmap != null) {
             options = new String[]{"Take Photo", "Choose from Gallery", "Remove Photo", "Cancel"};
@@ -511,39 +552,208 @@ public class PostFragment extends Fragment implements AddressSearchAdapter.OnAdd
         builder.show();
     }
     
+    private boolean isCameraAvailable() {
+        try {
+            // Check multiple camera intents to be more comprehensive
+            Intent[] cameraIntents = {
+                new Intent(MediaStore.ACTION_IMAGE_CAPTURE),
+                new Intent("android.media.action.IMAGE_CAPTURE"),
+                new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE),
+                new Intent(Intent.ACTION_CAMERA_BUTTON)
+            };
+            
+            PackageManager packageManager = requireActivity().getPackageManager();
+            
+            for (Intent intent : cameraIntents) {
+                if (intent.resolveActivity(packageManager) != null) {
+                    return true;
+                }
+            }
+            
+            // Also check if device has camera hardware
+            return packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) ||
+                   packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
+            
+        } catch (Exception e) {
+            // If there's any error, assume camera might be available and let the user try
+            return true;
+        }
+    }
+    
     private void checkCameraPermissionAndOpen() {
+        // Check if camera permission is already granted
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) 
-                != PackageManager.PERMISSION_GRANTED) {
+                == PackageManager.PERMISSION_GRANTED) {
+            // Permission already granted, open camera directly
+            openCamera();
+        } else {
+            // Check if we should show rationale for permission
+            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA)) {
+                // Show explanation to user before requesting permission
+                showCameraPermissionRationale();
+            } else {
+                // Request permission directly
+                ActivityCompat.requestPermissions(requireActivity(), 
+                        new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+            }
+        }
+    }
+    
+    private void showCameraPermissionRationale() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+        builder.setTitle("Camera Permission Required");
+        builder.setMessage("This app needs camera access to take photos for your tool listings. Please grant camera permission to continue.");
+        builder.setPositiveButton("Grant Permission", (dialog, which) -> {
             ActivityCompat.requestPermissions(requireActivity(), 
                     new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-        } else {
-            openCamera();
-        }
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.dismiss();
+            Toast.makeText(requireContext(), "Camera permission is required to take photos", Toast.LENGTH_SHORT).show();
+        });
+        builder.show();
     }
     
     private void checkStoragePermissionAndOpen() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) 
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), 
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
+        // For Android 13+ (API 33+), we need READ_MEDIA_IMAGES permission
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) 
+                    == PackageManager.PERMISSION_GRANTED) {
+                // Permission already granted, open gallery directly
+                openGallery();
+            } else {
+                // Check if we should show rationale for permission
+                if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.READ_MEDIA_IMAGES)) {
+                    showStoragePermissionRationale(Manifest.permission.READ_MEDIA_IMAGES);
+                } else {
+                    // Request permission directly
+                    ActivityCompat.requestPermissions(requireActivity(), 
+                            new String[]{Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_STORAGE_PERMISSION);
+                }
+            }
         } else {
-            openGallery();
+            // For older Android versions, check READ_EXTERNAL_STORAGE permission
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) 
+                    == PackageManager.PERMISSION_GRANTED) {
+                // Permission already granted, open gallery directly
+                openGallery();
+            } else {
+                // Check if we should show rationale for permission
+                if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    showStoragePermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE);
+                } else {
+                    // Request permission directly
+                    ActivityCompat.requestPermissions(requireActivity(), 
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
+                }
+            }
         }
     }
     
+    private void showStoragePermissionRationale(String permission) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+        builder.setTitle("Gallery Access Required");
+        builder.setMessage("This app needs access to your photos to select images for your tool listings. Please grant photo access permission to continue.");
+        builder.setPositiveButton("Grant Permission", (dialog, which) -> {
+            ActivityCompat.requestPermissions(requireActivity(), 
+                    new String[]{permission}, REQUEST_STORAGE_PERMISSION);
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.dismiss();
+            Toast.makeText(requireContext(), "Photo access permission is required to select images", Toast.LENGTH_SHORT).show();
+        });
+        builder.show();
+    }
+    
     private void openCamera() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        } else {
-            Toast.makeText(requireContext(), "Camera app not available", Toast.LENGTH_SHORT).show();
+        try {
+            // Try multiple camera intents in order of preference
+            Intent[] cameraIntents = {
+                new Intent(MediaStore.ACTION_IMAGE_CAPTURE),
+                new Intent("android.media.action.IMAGE_CAPTURE"),
+                new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE)
+            };
+            
+            PackageManager packageManager = requireActivity().getPackageManager();
+            boolean cameraFound = false;
+            
+            for (Intent intent : cameraIntents) {
+                if (intent.resolveActivity(packageManager) != null) {
+                    try {
+                        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+                        cameraFound = true;
+                        break;
+                    } catch (Exception e) {
+                        // If this intent fails, try the next one
+                        System.out.println("Camera intent failed: " + intent.getAction() + " - " + e.getMessage());
+                        continue;
+                    }
+                }
+            }
+            
+            if (!cameraFound) {
+                // If no camera app is found, try a more generic approach
+                try {
+                    Intent genericCameraIntent = new Intent(Intent.ACTION_CAMERA_BUTTON);
+                    if (genericCameraIntent.resolveActivity(packageManager) != null) {
+                        startActivityForResult(genericCameraIntent, REQUEST_IMAGE_CAPTURE);
+                        cameraFound = true;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Generic camera intent also failed: " + e.getMessage());
+                }
+                
+                if (!cameraFound) {
+                    // Last resort: try to open any camera app
+                    try {
+                        Intent anyCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(anyCameraIntent, REQUEST_IMAGE_CAPTURE);
+                        cameraFound = true;
+                    } catch (Exception e) {
+                        Toast.makeText(requireContext(), "Unable to open camera. Please use gallery option instead.", Toast.LENGTH_LONG).show();
+                        System.out.println("All camera attempts failed: " + e.getMessage());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Toast.makeText(requireContext(), "Error opening camera: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
     }
     
     private void openGallery() {
-        Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickImageIntent.setType("image/*");
-        startActivityForResult(pickImageIntent, REQUEST_IMAGE_PICK);
+        try {
+            Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickImageIntent.setType("image/*");
+            
+            // Check if there's a gallery app available
+            if (pickImageIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                startActivityForResult(pickImageIntent, REQUEST_IMAGE_PICK);
+            } else {
+                // Try alternative gallery intents
+                Intent[] galleryIntents = {
+                    new Intent(Intent.ACTION_GET_CONTENT),
+                    new Intent(Intent.ACTION_OPEN_DOCUMENT)
+                };
+                
+                boolean galleryFound = false;
+                for (Intent intent : galleryIntents) {
+                    intent.setType("image/*");
+                    if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                        startActivityForResult(intent, REQUEST_IMAGE_PICK);
+                        galleryFound = true;
+                        break;
+                    }
+                }
+                
+                if (!galleryFound) {
+                    Toast.makeText(requireContext(), "No gallery app found. Please install a gallery app.", Toast.LENGTH_LONG).show();
+                }
+            }
+        } catch (Exception e) {
+            Toast.makeText(requireContext(), "Error opening gallery: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
     
     @Override
