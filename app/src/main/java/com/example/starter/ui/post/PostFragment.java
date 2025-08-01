@@ -53,6 +53,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import android.content.pm.ApplicationInfo;
+import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 
 public class PostFragment extends Fragment implements AddressSearchAdapter.OnAddressClickListener {
@@ -580,20 +582,22 @@ public class PostFragment extends Fragment implements AddressSearchAdapter.OnAdd
     private void updatePhotoButtonWithImage() {
         if (selectedImageBitmap != null) {
             // Update button appearance to show photo was selected
-            binding.btnAddPhoto.setText("Photo Selected ✓");
+            binding.photoText.setText("Photo Selected ✓");
+            binding.photoText.setTextColor(requireContext().getResources().getColor(android.R.color.holo_green_light, null));
             binding.btnAddPhoto.setBackgroundResource(R.drawable.photo_button_with_image_background);
-            binding.btnAddPhoto.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             
-            // Change text color to green to indicate success
-            binding.btnAddPhoto.setTextColor(requireContext().getResources().getColor(android.R.color.holo_green_light, null));
+            // Update icon tint to green
+            binding.photoIcon.setColorFilter(requireContext().getResources().getColor(android.R.color.holo_green_light, null), PorterDuff.Mode.SRC_IN);
         }
     }
     
     private void resetPhotoButton() {
-        binding.btnAddPhoto.setText(getString(R.string.add_photo));
+        binding.photoText.setText(getString(R.string.add_photo));
+        binding.photoText.setTextColor(requireContext().getResources().getColor(android.R.color.white, null));
         binding.btnAddPhoto.setBackgroundResource(R.drawable.photo_button_background);
-        binding.btnAddPhoto.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_photo, 0, 0, 0);
-        binding.btnAddPhoto.setTextColor(requireContext().getResources().getColor(android.R.color.white, null));
+        
+        // Reset icon tint to white
+        binding.photoIcon.setColorFilter(requireContext().getResources().getColor(android.R.color.white, null), PorterDuff.Mode.SRC_IN);
         selectedImageBitmap = null;
         selectedImageUri = null;
     }

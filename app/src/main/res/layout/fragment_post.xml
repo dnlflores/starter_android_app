@@ -171,21 +171,37 @@
                     android:textSize="16sp"
                     android:layout_marginBottom="8dp" />
 
-                <Button
+                <LinearLayout
                     android:id="@+id/btn_add_photo"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:background="@drawable/photo_button_background"
-                    android:text="@string/add_photo"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:padding="16dp"
-                    android:drawableStart="@drawable/ic_add_photo"
-                    android:drawablePadding="12dp"
+                    android:orientation="horizontal"
                     android:gravity="center"
-                    android:stateListAnimator="@null"
-                    android:elevation="4dp" />
+                    android:padding="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:elevation="4dp">
+
+                    <ImageView
+                        android:id="@+id/photo_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_add_photo"
+                        app:tint="@color/white"
+                        android:contentDescription="Add Photo"
+                        android:layout_marginEnd="12dp" />
+
+                    <TextView
+                        android:id="@+id/photo_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add_photo"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
