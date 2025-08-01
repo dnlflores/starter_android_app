@@ -303,20 +303,6 @@ public class PostFragment extends Fragment implements AddressSearchAdapter.OnAdd
                 expandAddressSearch();
             }
         });
-
-        // Use Current Location button
-        binding.btnUseCurrentLocation.setOnClickListener(v -> {
-            // Clear the search input
-            binding.etSearchAddress.setText("");
-            
-            if (currentLocation != null) {
-                searchNearbyAddresses();
-                Toast.makeText(requireContext(), "Showing nearby addresses", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(requireContext(), "Location not available. Please enable location services.", Toast.LENGTH_LONG).show();
-                getCurrentLocation();
-            }
-        });
     }
 
     private void expandAddressSearch() {

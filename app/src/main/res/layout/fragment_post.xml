@@ -134,7 +134,7 @@
                     android:background="@drawable/auth_input_background"
                     android:hint="@string/tool_name_hint"
                     android:textColor="@color/white"
-                    android:textColorHint="@color/airbnb_light_gray"
+                    android:textColorHint="@color/airbnb_medium_gray"
                     android:padding="16dp"
                     android:textSize="16sp"
                     android:layout_marginBottom="16dp" />
@@ -155,7 +155,7 @@
                     android:background="@drawable/auth_input_background"
                     android:hint="@string/description_hint"
                     android:textColor="@color/white"
-                    android:textColorHint="@color/airbnb_light_gray"
+                    android:textColorHint="@color/airbnb_medium_gray"
                     android:padding="16dp"
                     android:textSize="16sp"
                     android:minLines="3"
@@ -247,7 +247,7 @@
                         android:src="@drawable/ic_map"
                         android:contentDescription="Location"
                         android:layout_marginEnd="12dp"
-                        app:tint="@color/white" />
+                        app:tint="@color/gray_medium" />
 
                     <EditText
                         android:id="@+id/et_address_collapsed"
@@ -255,8 +255,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:hint="@string/address_hint"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/airbnb_light_gray"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/airbnb_medium_gray"
                         android:textSize="16sp"
                         android:background="@null"
                         android:padding="0dp"
@@ -318,7 +318,7 @@
                     android:background="@drawable/auth_input_background"
                     android:hint="@string/price_hint"
                     android:textColor="@color/white"
-                    android:textColorHint="@color/airbnb_light_gray"
+                    android:textColorHint="@color/airbnb_medium_gray"
                     android:padding="16dp"
                     android:textSize="16sp"
                     android:inputType="numberDecimal" />
@@ -436,50 +436,6 @@
                     android:inputType="textPostalAddress"
                     android:imeOptions="actionSearch"
                     android:maxLines="1" />
-
-            </LinearLayout>
-
-            <!-- Use Current Location Button -->
-            <LinearLayout
-                android:id="@+id/btn_use_current_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/address_card_background"
-                android:layout_marginHorizontal="16dp"
-                android:padding="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:elevation="4dp">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_map"
-                    android:contentDescription="Current Location"
-                    android:layout_marginEnd="12dp"
-                    app:tint="@color/airbnb_primary" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/use_current_location"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/nearby"
-                    android:textColor="@color/airbnb_light_gray"
-                    android:textSize="14sp"
-                    android:background="@drawable/round_dark_translucent_background"
-                    android:padding="4dp"
-                    android:paddingHorizontal="8dp" />
 
             </LinearLayout>
 
