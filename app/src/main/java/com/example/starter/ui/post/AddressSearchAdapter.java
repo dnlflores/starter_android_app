@@ -63,7 +63,22 @@ public class AddressSearchAdapter extends RecyclerView.Adapter<AddressSearchAdap
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && listener != null) {
-                    listener.onAddressClick(addresses.get(position));
+                    // Add subtle animation feedback
+                    v.animate()
+                        .scaleX(0.95f)
+                        .scaleY(0.95f)
+                        .setDuration(100)
+                        .withEndAction(() -> {
+                            v.animate()
+                                .scaleX(1.0f)
+                                .scaleY(1.0f)
+                                .setDuration(100)
+                                .withEndAction(() -> {
+                                    listener.onAddressClick(addresses.get(position));
+                                })
+                                .start();
+                        })
+                        .start();
                 }
             });
         }

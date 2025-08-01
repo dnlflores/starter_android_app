@@ -25,15 +25,7 @@
         android:id="@+id/navigation_post"
         android:name="com.example.starter.ui.post.PostFragment"
         android:label="@string/title_post"
-        tools:layout="@layout/fragment_post">
-        <action
-            android:id="@+id/action_post_to_address_search"
-            app:destination="@id/navigation_address_search"
-            app:enterAnim="@anim/nav_slide_in_right"
-            app:exitAnim="@anim/nav_slide_out_left"
-            app:popEnterAnim="@anim/nav_slide_in_left"
-            app:popExitAnim="@anim/nav_slide_out_right" />
-    </fragment>
+        tools:layout="@layout/fragment_post" />
 
     <fragment
         android:id="@+id/navigation_listings"
@@ -90,12 +82,5 @@
         android:name="com.example.starter.ui.auth.SignUpFragment"
         android:label="Create Account"
         tools:layout="@layout/fragment_sign_up" />
-    
-    <!-- Address Search Fragment -->
-    <fragment
-        android:id="@+id/navigation_address_search"
-        android:name="com.example.starter.ui.post.AddressSearchFragment"
-        android:label="Address Search"
-        tools:layout="@layout/fragment_address_search" />
     
 </navigation>
