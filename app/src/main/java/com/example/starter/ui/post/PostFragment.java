@@ -1,12 +1,18 @@
 package com.example.starter.ui.post;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -58,6 +64,16 @@ public class PostFragment extends Fragment implements AddressSearchAdapter.OnAdd
     private LocationManager locationManager;
     private Location currentLocation;
     private Handler mainHandler;
+    
+    // Photo selection constants
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_PICK = 2;
+    private static final int REQUEST_CAMERA_PERMISSION = 1002;
+    private static final int REQUEST_STORAGE_PERMISSION = 1003;
+    
+    // Photo variables
+    private Uri selectedImageUri;
+    private Bitmap selectedImageBitmap;
     
     // Google Places API
     private PlacesClient placesClient;
@@ -299,9 +315,25 @@ public class PostFragment extends Fragment implements AddressSearchAdapter.OnAdd
     private void setupClickListeners() {
         // Collapsed address input click
         binding.collapsedAddressInput.setOnClickListener(v -> {
+            System.out.println("Collapsed address input clicked!");
             if (!isSearchExpanded) {
+                System.out.println("Expanding address search...");
                 expandAddressSearch();
             }
+        });
+        
+        // Also add click listener to the EditText itself as backup
+        binding.etAddressCollapsed.setOnClickListener(v -> {
+            System.out.println("EditText address clicked!");
+            if (!isSearchExpanded) {
+                System.out.println("Expanding address search from EditText...");
+                expandAddressSearch();
+            }
+        });
+        
+        // Add photo button click
+        binding.btnAddPhoto.setOnClickListener(v -> {
+            showPhotoSelectionDialog();
         });
     }
 
@@ -407,7 +439,157 @@ public class PostFragment extends Fragment implements AddressSearchAdapter.OnAdd
             } else {
                 Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_LONG).show();
             }
+        } else if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_LONG).show();
+            }
+        } else if (requestCode == REQUEST_STORAGE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openGallery();
+            } else {
+                Toast.makeText(requireContext(), "Storage permission denied", Toast.LENGTH_LONG).show();
+            }
         }
+    }
+    
+    // Photo selection methods
+    private void showPhotoSelectionDialog() {
+        String[] options;
+        if (selectedImageBitmap != null) {
+            options = new String[]{"Take Photo", "Choose from Gallery", "Remove Photo", "Cancel"};
+        } else {
+            options = new String[]{"Take Photo", "Choose from Gallery", "Cancel"};
+        }
+        
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+        builder.setTitle("Add Photo");
+        builder.setItems(options, (dialog, which) -> {
+            switch (which) {
+                case 0: // Take Photo
+                    checkCameraPermissionAndOpen();
+                    break;
+                case 1: // Choose from Gallery
+                    checkStoragePermissionAndOpen();
+                    break;
+                case 2: // Remove Photo or Cancel
+                    if (selectedImageBitmap != null) {
+                        resetPhotoButton();
+                        Toast.makeText(requireContext(), "Photo removed", Toast.LENGTH_SHORT).show();
+                    }
+                    dialog.dismiss();
+                    break;
+                case 3: // Cancel (only when photo is selected)
+                    if (selectedImageBitmap != null) {
+                        dialog.dismiss();
+                    }
+                    break;
+            }
+        });
+        builder.show();
+    }
+    
+    private void checkCameraPermissionAndOpen() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) 
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), 
+                    new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        } else {
+            openCamera();
+        }
+    }
+    
+    private void checkStoragePermissionAndOpen() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) 
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), 
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
+        } else {
+            openGallery();
+        }
+    }
+    
+    private void openCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } else {
+            Toast.makeText(requireContext(), "Camera app not available", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    private void openGallery() {
+        Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickImageIntent.setType("image/*");
+        startActivityForResult(pickImageIntent, REQUEST_IMAGE_PICK);
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE && data != null) {
+                // Handle camera photo
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    selectedImageBitmap = (Bitmap) extras.get("data");
+                    if (selectedImageBitmap != null) {
+                        // Update button to show selected image
+                        updatePhotoButtonWithImage();
+                        Toast.makeText(requireContext(), "Photo captured successfully", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            } else if (requestCode == REQUEST_IMAGE_PICK && data != null) {
+                // Handle gallery photo
+                selectedImageUri = data.getData();
+                if (selectedImageUri != null) {
+                    try {
+                        selectedImageBitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), selectedImageUri);
+                        updatePhotoButtonWithImage();
+                        Toast.makeText(requireContext(), "Photo selected successfully", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(requireContext(), "Error loading image", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+    
+    private void updatePhotoButtonWithImage() {
+        if (selectedImageBitmap != null) {
+            // Update button appearance to show photo was selected
+            binding.btnAddPhoto.setText("Photo Selected ✓");
+            binding.btnAddPhoto.setBackgroundResource(R.drawable.photo_button_with_image_background);
+            binding.btnAddPhoto.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            
+            // Change text color to green to indicate success
+            binding.btnAddPhoto.setTextColor(requireContext().getResources().getColor(android.R.color.holo_green_light, null));
+        }
+    }
+    
+    private void resetPhotoButton() {
+        binding.btnAddPhoto.setText(getString(R.string.add_photo));
+        binding.btnAddPhoto.setBackgroundResource(R.drawable.photo_button_background);
+        binding.btnAddPhoto.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_photo, 0, 0, 0);
+        binding.btnAddPhoto.setTextColor(requireContext().getResources().getColor(android.R.color.white, null));
+        selectedImageBitmap = null;
+        selectedImageUri = null;
+    }
+    
+    // Getter methods for the selected photo data
+    public Bitmap getSelectedImageBitmap() {
+        return selectedImageBitmap;
+    }
+    
+    public Uri getSelectedImageUri() {
+        return selectedImageUri;
+    }
+    
+    public boolean hasPhotoSelected() {
+        return selectedImageBitmap != null;
     }
 
     @Override
